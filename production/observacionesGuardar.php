@@ -585,6 +585,29 @@ while ($row = $resultado->fetch_assoc()) {
 
 <!-- Inicio -->
 
+<?php 
+
+$id = $_GET['id'];
+
+$sql22 = "SELECT * FROM  movdObservacionesRequi  WHERE idRequisiciones2023 = $id";
+$resultado22 = $conexion->query($sql22);
+
+if (mysqli_num_rows($resultado22) > 0) {
+  // La consulta devolvió al menos una fila
+  $row = $resultado22->fetch_array(MYSQLI_ASSOC);
+
+  $observacionesGuardadas = $row['ObservacionesRequi'];
+
+} else {
+  // La consulta no devolvió resultados
+  $observacionesGuardadas = "";
+}
+
+
+
+
+?>
+
 <!-- comentarios START -->
 
 <div class="row">
@@ -597,7 +620,7 @@ while ($row = $resultado->fetch_assoc()) {
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                       <form action="saveObservacionesRequi.php" method="POST" name="saveForm" >
-                      <textarea name="Observaciones" class="resizable_textarea form-control" placeholder="Observaciones de la requisicion"></textarea>
+                      <textarea name="Observaciones" class="resizable_textarea form-control" placeholder="Observaciones de la requisicion"><?php echo $observacionesGuardadas;?></textarea>
                       <input type="text" name="id" style="display:none;" value="<?php echo $id;?>">
                    
                     </div>

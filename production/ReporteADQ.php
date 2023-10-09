@@ -206,7 +206,7 @@ $username = $_SESSION['username'];
 }
 </style>
   </head>
-  <body>
+  <body onload="window.print()">
 
   <p style=" position: absolute; top: 55px; left: 550px; color: black; height: 0%; font-family: 'Roboto', sans-serif; font-size: 14px;"> <?php echo $dia?></p>
   <p style=" position: absolute; top: 55px; left: 590px; color: black; height: 0%; font-family: 'Roboto', sans-serif; font-size: 14px;"> <?php echo $mes?></p>
@@ -250,7 +250,7 @@ if ($conexion->connect_error) {
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
+$sql = "SELECT *, a.idObjetoGasto AS ObjetoGasto FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
 $resultado = $conexion->query($sql);
 
 //echo $sql;
@@ -265,7 +265,7 @@ while ($row = $resultado->fetch_assoc()) {
 
              <tr class="even pointer">
 
-             <td >' . $row["idObjetoGasto"] . '01</td>
+             <td >' . $row["ObjetoGasto"] . '01</td>
       
              <td ></td>
              <td ></td>

@@ -517,66 +517,7 @@ if ($editable == "Modificable") {
                       <?php
 //  $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
 
-switch ($idLicitacion) {
 
-    case '2':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '3':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '4':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
-        break;
-
-    case '5':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
-        break;
-
-    case '6':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 221';
-        break;
-
-    case '7':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '8':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '9':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '10':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '11':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '12':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '13':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '14':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    default:
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
-        break;
-}
-
-$resultado = $conexion->query($query);
 
 ?>
 
@@ -591,9 +532,114 @@ $resultado = $conexion->query($query);
                             <option value="0">Seleccione un objeto del gasto</option>
 
 
-                            <?php while ($row = $resultado->fetch_assoc()) {?>
-                            <option value="<?php echo $row['idObjetoGasto']; ?>"><?php echo $row['idObjetoGasto'] . ' - ' . $row['descripcionObjetoGasto']; ?></option>
-                            <?php }?>
+                            <?php
+
+
+
+                                $query = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
+                                
+                                $result = $conexion->query($query);
+
+                                
+
+                                if ($result->num_rows > 0) {
+                                    // La consulta ha devuelto resultados
+                                    $row5555 = $result->fetch_array(MYSQLI_ASSOC);
+
+
+                                   
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = '.$row5555['idObjetoGasto'].'';
+                         
+                                  
+                                             $resultado = $conexion->query($query);
+
+                                            while ($row = $resultado->fetch_assoc()) 
+                                            {
+                                            echo '<option value="'.$row['idObjetoGasto'].'"> '.$row['idObjetoGasto'].' - '.$row['descripcionObjetoGasto'].' </option>';
+                                            }
+                                  
+                                } else {
+                                    // La consulta no ha devuelto resultados
+
+
+                                    switch ($idLicitacion) {
+
+                                      case '2':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+                                          break;
+                                  
+                                      case '3':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+                                          break;
+                                  
+                                      case '4':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
+                                          break;
+                                  
+                                      case '5':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
+                                          break;
+                                  
+                                      case '6':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 221';
+                                          break;
+                                  
+                                      case '7':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+                                          break;
+                                  
+                                      case '8':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '9':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '10':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '11':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '12':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '13':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      case '14':
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+                                          break;
+                                  
+                                      default:
+                                          $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
+                                          break;
+                                  }
+                                  
+                                  $resultado = $conexion->query($query);
+
+                                    while ($row = $resultado->fetch_assoc()) 
+                                    {
+                                     echo '<option value="'.$row['idObjetoGasto'].'"> '.$row['idObjetoGasto'].' - '.$row['descripcionObjetoGasto'].' </option>';
+                                     }
+                                  
+                                }
+
+
+
+
+                        
+                          
+                          ?>
+                         
+                              
+
+
                           </select>
 
                       </div>
@@ -632,11 +678,18 @@ $resultado = $conexion->query($query);
 
 
                       <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="Producto" id="Producto">
-                            <option value="0">Seleccione una producto</option>
+                      <!-- <select class="form-control" name="Producto" id="Producto">
+                            <option value="0">Seleccione un producto</option>
 
 
-                          </select>
+                          </select> -->
+
+                          <input type="text"  class="form-control" list="Producto" value="" name="Producto" id="ProductoC" autocomplete="off" >
+
+
+                          <datalist id="Producto">
+
+                          </datalist>
 
                       </div>
 
@@ -648,6 +701,7 @@ $resultado = $conexion->query($query);
 
                       <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
 echo $id;?>" style="display:none;">
+<input type="text" name="idLicitacion" style="display:none;" value=" <?php  echo $idLicitacion;?>">
 
 
 
@@ -1116,12 +1170,14 @@ while ($row = $resultado->fetch_assoc()) {
 
           $("#ObjetoGasto option:selected").each(function() {
             ObjetoGasto = $(this).val();
+              $('#ProductoC').val("");
             Licitacion = <?php echo $idLicitacion; ?>;
             $.post("getSubProducto.php", {
               ObjetoGasto: ObjetoGasto,
               Licitacion: Licitacion
             }, function(data) {
-              $("#Producto").html(data);
+              $('#Producto').empty();
+              $("#Producto").append(`${data}`);;
             });
           });
         })
@@ -1147,7 +1203,7 @@ while ($row = $resultado->fetch_assoc()) {
           {
             alert('Debe seleccionar una unidad');
           }
-          else if (Producto == 0)
+          else if (Producto != '')
           {
             alert('Debe seleccionar un producto');
           }
@@ -1237,18 +1293,18 @@ else {
       }
 
 
-      window.onload = function() {
-  var myInput = document.getElementById('DescripcionProductoRegistro');
-  myInput.onpaste = function(e) {
-    e.preventDefault();
-    alert("esta acción está prohibida");
-  }
-  
-  myInput.oncopy = function(e) {
-    e.preventDefault();
-    alert("esta acción está prohibida");
-  }
-}
+//       window.onload = function() {
+//   var myInput = document.getElementById('DescripcionProductoRegistro');
+//   myInput.onpaste = function(e) {
+//     e.preventDefault();
+//     alert("esta acción está prohibida");
+//   }
+
+//   myInput.oncopy = function(e) {
+//     e.preventDefault();
+//     alert("esta acción está prohibida");
+//   }
+// }
     </script>
 
 

@@ -27,7 +27,7 @@ $id = $_GET['id'];
 ?>
 
 
- 
+
 
 
 
@@ -51,6 +51,11 @@ $id = $_GET['id'];
   <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
   <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
   <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+   <!-- bootstrap-daterangepicker -->
+   <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+      <!-- bootstrap-datetimepicker -->
+      <link href="../vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
   <!-- Custom Theme Style -->
   <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -70,6 +75,38 @@ $id = $_GET['id'];
     tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
   }
+
+  function check(e) {
+    tecla = (document.all) ? e.keyCode : e.which;
+
+    //Tecla de retroceso para borrar, siempre la permite
+    if (tecla == 8) {
+        return true;
+    }
+
+    if (tecla == 32) {
+        return true;
+    }
+
+    if (tecla == 47) {
+        return true;
+    }
+
+    if (tecla == 35) {
+        return true;
+    }
+
+    if (tecla == 45) {
+        return true;
+    }
+
+
+
+    // Patrón de entrada, en este caso solo acepta numeros y letras
+    patron = /[A-Za-z0-9.]/;
+    tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+}
 
 
   function mayus(e) {
@@ -265,7 +302,7 @@ if (isset($_GET['Mensaje'])) {
 
 <?php
 
-$sqlinfo = "SELECT *,a.Estatus AS RequiEstatus   FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno  INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion INNER JOIN movdRequisiciones2023FormAdq z on a.idRequisiciones2023 = z.idRequisiciones2023  WHERE a.idRequisiciones2023 = '$id'";
+$sqlinfo = "SELECT *,a.Estatus AS RequiEstatus   FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno  INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion WHERE idRequisiciones2023 = '$id'";
 
 // echo $sqlinfo;
 $result = $conexion->query($sqlinfo);
@@ -289,7 +326,7 @@ $myDateTime = DateTime::createFromFormat('Y-m-d', $fecha);
 $newDateString = $myDateTime->format('d/M/Y');
 
 $id = $_GET['id'];
-$Folio = $row['Folio'];
+
 $editable = $row['RequiEstatus'];
 
 $Licitacion = $row['Licitacion'] . ' ' . $row['descripcionLicitacion'];
@@ -407,12 +444,6 @@ $idLicitacion = $row['idLicitacion'];
                         <input type="text" class="form-control"  readonly value="<?php echo $Licitacion; ?>">
                         </div>
 
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Folio ADQ UF</label>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <input type="text" class="form-control" name="Folio"  readonly value="<?php echo $Folio; ?>">
-                        </div>
-
-
 
 
 
@@ -426,22 +457,21 @@ $idLicitacion = $row['idLicitacion'];
 
                       <div class="ln_solid"></div>
 
-                      
+
 
 
                     </form>
 
-                    <div class="row">  
+                    <div class="row">
 
-                    <?php 
-                        if ($editable == "Modificable") 
-                        {
-                          echo '<a href="ModRegistroObjetosRequi.php?id='.$id.'"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
-                        }else {
-                          echo '<button class="btn btn-warning pull-right" disabled><i class="fa fa-pencil"></i> Modificar</button>';
-                        }
-                    
-                    ?>
+                    <?php
+if ($editable == "Modificable") {
+    echo '<a href="ModRegistroObjetosRequi.php?id=' . $id . '"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
+} else {
+    echo '<button class="btn btn-warning pull-right" disabled><i class="fa fa-pencil"></i> Modificar</button>';
+}
+
+?>
 
                     </div>
                   </div>
@@ -455,7 +485,7 @@ $idLicitacion = $row['idLicitacion'];
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Registro de partidas <small></small></h2>
+                    <h2>Registro de partidas | Objeto del Gasto / Cantidad / Unidad / Descripción<small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -477,7 +507,7 @@ $idLicitacion = $row['idLicitacion'];
                   </div>
                   <div class="x_content">
                     <br />
-                   
+                    <form id="demoform2" data-parsley-validate class="form-horizontal form-label-left" action="AddProducto.php" method="post" name="AddproductoForm">
 
 
 
@@ -485,36 +515,120 @@ $idLicitacion = $row['idLicitacion'];
 
 
                       <?php
-            
-                           $query = 'SELECT * FROM Requisiciones2023 Where idProceso != 80 '; 
-                          // echo  $query;
-                     
-                           $resultado = $conexion->query($query);
+//  $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
+
+switch ($idLicitacion) {
+
+    case '2':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+        break;
+
+    case '3':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+        break;
+
+    case '4':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
+        break;
+
+    case '5':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
+        break;
+
+    case '6':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 221';
+        break;
+
+    case '7':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
+        break;
+
+    case '8':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '9':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '10':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '11':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '12':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '13':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    case '14':
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
+        break;
+
+    default:
+        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
+        break;
+}
+
+$resultado = $conexion->query($query);
 
 ?>
 
- 
+
 
                       <div class="x_content">
                     <br>
 
 
-                      <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                       <select class="form-control" name="ObjetoGasto" id="ObjetoGasto">
-                            <option value="0">Seleccione la Requi</option>
+                            <option value="0">Seleccione un objeto del gasto</option>
 
 
                             <?php while ($row = $resultado->fetch_assoc()) {?>
-                            <option value="<?php echo $row['idRequisiciones2023']; ?>"><?php echo $row['idRequisiciones2023']; ?></option>
+                            <option value="<?php echo $row['idObjetoGasto']; ?>"><?php echo $row['idObjetoGasto'] . ' - ' . $row['descripcionObjetoGasto']; ?></option>
                             <?php }?>
                           </select>
 
                       </div>
 
-             
-                     
+                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control" id="Cantidad" placeholder="Cantidad" name="Cantidad" onkeypress="return valida(event)" onpaste="return true">
 
-                      <form id="demoform2" data-parsley-validate class="form-horizontal form-label-left" action="AddProductoMIX.php" method="post" name="AddproductoForm">
+                      </div>
+
+                      <?php
+// $query = 'SELECT * FROM catcUnidadesMedida';
+
+if ($idLicitacion != 1) {
+    $query = 'SELECT * FROM catcUnidadesMedida';
+} else {
+    $query = 'SELECT * FROM catcUnidadesMedida';
+
+}
+
+$resultado = $conexion->query($query);
+
+?>
+
+                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                      <select class="form-control" name="unidadMedida" id="unidadMedida">
+                            <option value="0">Seleccione una unidad de medida</option>
+
+
+                            <?php while ($row = $resultado->fetch_assoc()) {?>
+                            <option value="<?php echo $row['idcatcUnidadesMedida']; ?>"><?php echo $row['descripcionUnidadMedida']; ?></option>
+                            <?php }?>
+                          </select>
+
+                      </div>
+
 
 
                       <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
@@ -535,26 +649,25 @@ $idLicitacion = $row['idLicitacion'];
                       <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
 echo $id;?>" style="display:none;">
 
-<input type="text" class="form-control" id="Folio"  name="Folio" value="<?php $id = $_GET['id'];
-echo $id;?>" style="display:none;">
-
 
 
                             </form>
 
                             <div class="col-md-12 col-sm-12 col-xs-12 ">
 
-                            <?php 
-                        if ($editable == "Modificable") 
-                        {
-                          echo '<button type="button" class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
-                        }else {
-                          echo '<button type="button" disabled class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
-                        }
-                    
-                    ?>
+                            <?php
+if ($editable == "Modificable") {
+    echo '<button type="button" class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
+} else {
+    echo '<button type="button" disabled class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
+}
+
+?>
 
 
+                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-search"></i>   Ver Catalogo</button>
+                            <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target=".bs-example-modal-lg2"><i class="fa fa-pencil"></i> Registrar </button>
+                            <a href="Clasificador.pdf" target="_blank"><button type="button" class="btn btn-default pull-right"><i class="fa fa-search"></i>Clasificador</button></a>
 
                         </div>
 
@@ -582,12 +695,12 @@ echo $id;?>" style="display:none;">
       </div>
       <div class="modal-body">
       <div class="container">
-        
-      <?php
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
-         $resultado = $conexion->query($query);
 
-        ?>
+      <?php
+$query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
+$resultado = $conexion->query($query);
+
+?>
 
 
 
@@ -608,7 +721,7 @@ echo $id;?>" style="display:none;">
         </div>
 
         <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-          <input type="text" class="form-control" id="DescripcionProductoRegistro" name="DescripcionProductoRegistro" placeholder="Descripción del producto" onkeyup="mayus(this)">
+          <input type="text" class="form-control" id="DescripcionProductoRegistro" name="DescripcionProductoRegistro" placeholder="Descripción del producto" onkeyup="mayus(this)" onkeypress="return check(event)">
           <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
 echo $id;?>" style="display:none;">
           <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
@@ -642,7 +755,7 @@ echo $id;?>" style="display:none;">
     </div>
   </div>
 </div>
-                 
+
 
 
 
@@ -657,7 +770,7 @@ echo $id;?>" style="display:none;">
       </div>
       <div class="modal-body">
       <div class="container">
-      <table id="datatable2" class="table table-striped table-bordered">
+      <table id="datatable" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
                                         <th>Objeto del gasto</th>
@@ -718,6 +831,13 @@ while ($row = $resultado->fetch_assoc()) {
 
 
 
+<!-- Inicio -->
+
+
+
+
+
+
                   <div class="ln_solid"></div>
 
 
@@ -754,6 +874,7 @@ while ($row = $resultado->fetch_assoc()) {
                         <thead>
                           <tr class="headings">
                           <th class="column-title" style="display: table-cell;">No. </th>
+
                             <th class="column-title" style="display: table-cell;">Objeto del gasto </th>
                             <th class="column-title" style="display: table-cell;">Cantidad </th>
                             <th class="column-title" style="display: table-cell;">Unidad </th>
@@ -778,7 +899,7 @@ if ($conexion->connect_error) {
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM movdTempRequiMIX  WHERE idRequisiciones2023 = $id";
+$sql = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
 $resultado = $conexion->query($sql);
 
 //echo $sql;
@@ -786,33 +907,52 @@ $resultado = $conexion->query($sql);
 $Count = 0;
 while ($row = $resultado->fetch_assoc()) {
 
-  $Count++;
+    $Count++;
 
-                    
-                          echo '
-
-
+    if ($editable == "Modificable") {
+        echo '
 
 
 
-                          <tr class="even pointer" id="'.$row["idmovdRequisiciones2023"].'">
-   
+
+
+                          <tr class="even pointer" id="' . $row["idmovdRequisiciones2023"] . '">
                           <td class=" ">' . $row["idmovdRequisiciones2023"] . '</td>
                           <td class=" ">' . $row["idObjetoGasto"] . '</td>
                           <td class=" ">' . $row["Cantidad"] . '</td>
                           <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
                           <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
-                          <td class=" "> <a class="btn btn-danger btn-sm" href="DelProdMIX.php?idpmovd=' . $row["idmovdRequisiciones2023"] . '&id=' . $id . '"> Eliminar</a></td>
-             
+                          <td class=" "> <a class="btn btn-danger btn-sm" href="DelProd.php?idmovd=' . $row["idmovdRequisiciones2023"] . '&id=' . $id . '"> Eliminar</a></td>
+
                           </td>
                         </tr>
-             
-             
+
+
                         ';
 
-                     
+    } else {
+        echo '
 
-   
+
+
+
+
+                          <tr class="even pointer">
+
+                          <td class=" ">' . $row["idObjetoGasto"] . '</td>
+                          <td class=" ">' . $row["Cantidad"] . '</td>
+                          <td class=" ">' . $row["descripcionUnidadMedida"] . '</td>
+                          <td class=" ">' . $row["descripcionProducto"] . '</td>
+                          <td class=" "> <button disabled class="btn btn-danger btn-sm"> Eliminar</button></td>
+
+                          </td>
+                        </tr>
+
+
+                        ';
+
+    }
+
 }
 
 ?>
@@ -838,26 +978,7 @@ while ($row = $resultado->fetch_assoc()) {
                   <div class="ln_solid"></div>
 
 
-                  <div class="row">
 
-<div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="row no-print">
-                        <div class="col-xs-12">
-                        <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">FOLIO UNIDAD CENTRAL</label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio" id="Folio"  value="" placeholder="Numero en color rojo en el formato" required>
-                      </div>
-                      </div>
-                     
-              </div>
-
-
-              </form>
-
-</div>
-</div>
 
 
                 <div class="row">
@@ -873,18 +994,15 @@ while ($row = $resultado->fetch_assoc()) {
 
 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                 
-             
+
+
 
                   <div class="row no-print">
                         <div class="col-xs-12">
                          <button class="btn btn-primary btn-block btn-lg" style="margin-right: 5px;" id="next"><i class="fa fa-download"></i> SIGUIENTE</button>
-                         <a href="ReporteADQMIX.php?id=<?php echo $id;?>"> <button class="btn btn-danger btn-block btn-lg" id="save" style="margin-right: 5px;"><i class="fa fa-save"></i> VER FORMATO ADQ UF</button></a>
-
-                       
                         </div>
                       </div>
-          
+
               </div>
 
 
@@ -949,6 +1067,12 @@ while ($row = $resultado->fetch_assoc()) {
     <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
     <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
 
+        <!-- bootstrap-daterangepicker -->
+        <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap-datetimepicker -->
+    <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
@@ -969,25 +1093,32 @@ while ($row = $resultado->fetch_assoc()) {
 
 
         $('#data_table').Tabledit({
-        editButton: true,    
+        editButton: true,
         removeButton: false,
         columns: {
-          identifier: [0, 'id'],                    
+          identifier: [0, 'id'],
           editable: [[1, 'Objeto'],[2, 'Cantidad'], [3, 'Unidad'], [4, 'Descripcion']]
         },
         hideIdentifier: true,
-        url: 'editarCelda5.php'      
+        url: 'editarCelda2.php'
     });
+
+
+    $('#myDatepicker4').datetimepicker({
+        ignoreReadonly: true,
+        allowInputToggle: true
+    });
+
 
 
         $("#ObjetoGasto").change(function() {
 
 
           $("#ObjetoGasto option:selected").each(function() {
-            Requi = $(this).val();
-            Licitacion = <?php echo $idLicitacion;?>;
-            $.post("getSubPartidaMIX.php", {
-              ObjetoGasto: Requi,
+            ObjetoGasto = $(this).val();
+            Licitacion = <?php echo $idLicitacion; ?>;
+            $.post("getSubProducto.php", {
+              ObjetoGasto: ObjetoGasto,
               Licitacion: Licitacion
             }, function(data) {
               $("#Producto").html(data);
@@ -1061,17 +1192,16 @@ $('#next').on('click', function(){
 
 <?php
 
-$sql = "SELECT * FROM movdTempRequiMIX WHERE idRequisiciones2023 = $id";
+$sql = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
 $resultado = $conexion->query($sql);
 $row = mysqli_num_rows($resultado);
-echo 'var Count ='.$row.';';
+echo 'var Count =' . $row . ';';
 
- 
 ?>
-
-var Folio = $('#Folio').val();
 // alert('hihi'+Count);
 
+var Objeto2  =   $('#ObjetoGastoRegistro').val();
+var Producto2  =   $('#DescripcionProductoRegistro').val();
 
 if (Count == 0)
 {
@@ -1080,7 +1210,7 @@ if (Count == 0)
 
 else {
 
-  window.location.href = 'observacionesGuardarMIXset.php?id=<?php echo $id;?>&Folio='+Folio;
+  window.location.href = 'observacionesGuardar.php?id=<?php echo $id; ?>';
 
 }
 
@@ -1105,6 +1235,20 @@ else {
           });
         }
       }
+
+
+//       window.onload = function() {
+//   var myInput = document.getElementById('DescripcionProductoRegistro');
+//   myInput.onpaste = function(e) {
+//     e.preventDefault();
+//     alert("esta acción está prohibida");
+//   }
+  
+//   myInput.oncopy = function(e) {
+//     e.preventDefault();
+//     alert("esta acción está prohibida");
+//   }
+// }
     </script>
 
 

@@ -49,18 +49,6 @@ $DepSolicitante = $_POST['DepSolicitante'];
 //echo '<BR>  $DepSolicitante: '.$DepSolicitante;
 
 
-$hoy = getdate();
-$d = $hoy['mday'];
-  $m = $hoy['mon'];
-  $y = $hoy['year'];
-
-    $d2= date("d");
-    $m2= date("m");
-    $y2= date("y");
-
-    $Fecha =''.$d2.'/'.$m2.'/'.$y.'';
-
-
 
 switch ($DepSolicitante) {
 
@@ -76,7 +64,7 @@ case '4403 - SECRETARÍA ACADEMICA':
 
 $DepSolicitante = 4;  
 break;
-case '4404 - SECRETARÍA EXTENSIÓN Y DIFUSIÓN':
+case '4404 - SECRETARÍA EXTENSION':
 
 $DepSolicitante = 5;  
 break;
@@ -162,9 +150,6 @@ $DepSolicitante = 9;
 break;
 case '4403 - COORDINACIÓN DE LABORATORIOS ACADÉMICOS':
 
-
-
-
 $DepSolicitante = 3;  
 break;
 
@@ -231,60 +216,31 @@ $idLicitacion= $_POST['Licitacion'];
 // echo '<BR> $idServicioExterno  :'.$idServicioExterno ;
 
 
-$Folio = $_POST['FolioADQUF'];
 
+$id = $_POST['id'];
 
-
-
-$idProceso = 80;
 
 
 
 
 $sql='
-INSERT INTO Requisiciones2023(
-  idUsuario,
-  idcatCategoria,
-  idDepartamentoSolicitante,
-  UnidadAdministrativa,
-  Fecha,
-  motivoSolicitud,
-  idFuenteFinanciamiento,
-  idProyecto,
-  UnidadPresupuestal,
-  idConvenio,
-  idcatCategorias,
-  idServicioExterno,
-  Estatus,
-  idLicitacion,
-  idProceso,
-  OrdenCompra,
-  FechaEntregaObs,
-  PersonaEntregar,
-  TelefonoEntrega
-)
-VALUES(
-  '.$idUsuario.',
-  '.$Categoria.',
-  '.$DepSolicitante.',
-  '.$unidadAdministrativa.',
-  "'.$Fecha.'",
-  "MIX-'.$Motivos.'",
-  '.$Fuente.',
-  '.$Proyecto.',
-  '.$UnidadPresupuestal.',
-  '.$Convenios.',
-  '.$Categoria.',
-  '.$idServicioExterno.',
-  "Modificable",
-  '.$idLicitacion.',
-  '.$idProceso.',
-  "OC-Pendinete",
-  "",
-  "",
-  ""
-
-)';
+UPDATE Requisiciones2023
+SET 
+  idUsuario = '.$idUsuario.',
+  idcatCategoria = '.$Categoria.',
+  idDepartamentoSolicitante = '.$DepSolicitante.',
+  UnidadAdministrativa =  '.$unidadAdministrativa.',
+  Fecha =  "'.$Fecha.'",
+  motivoSolicitud = "'.$Motivos.'",
+  idFuenteFinanciamiento = '.$Fuente.',
+  idProyecto = '.$Proyecto.',
+  UnidadPresupuestal = '.$UnidadPresupuestal.',
+  idConvenio = '.$Convenios.',
+  idcatCategorias = '.$Categoria.',
+  idLicitacion = '.$idLicitacion.',
+  idServicioExterno =  '.$idServicioExterno.'
+WHERE
+idRequisiciones2023 = '.$id.'';
 
 
 
@@ -320,61 +276,30 @@ VALUES(
 
            // echo "Correcto";
 
-           $sql = 'SELECT @@IDENTITY AS "idRequisiciones2023"';
+        //    $sql = 'SELECT @@IDENTITY AS "idRequisiciones2023"';
 
            // echo $sql;
 
-           $result = $conexion->query($sql);
+        //    $result = $conexion->query($sql);
 
 
-           if ($result->num_rows > 0) 
-           {
+        //    if ($result->num_rows > 0) 
+        //    {
 
-            }
-            $row = $result->fetch_array(MYSQLI_ASSOC);
+        //     }
+        //     $row = $result->fetch_array(MYSQLI_ASSOC);
 
-            $id = $row['idRequisiciones2023'];
+            // $id = $row['idRequisiciones2023'];
 
-            $sql5 = '
-            
-            INSERT INTO movdRequisiciones2023FormAdq(
-              ObservacionesFormAdq,
-              idRequisiciones2023,
-              Folio,
-              FechaEnvio
-          )
-          VALUES(
-            "MIX",
-            '.$id.',
-            "'.$Folio.'",
-            "'.$Fecha.'"
-          
-          )
-            
-            ';
-
-            if ($conexion->query($sql5)) 
-            {
-              header('Location: registroObjetosRequiMIX.php?Mensaje=Correcto&id='.$id.'');
-            }else {
-              echo $sql5;
-            }
-
-
-
-
-
-
-
-            
+            header('Location: mostrarRequi2023AdminPro.php?id='.$id.'');
      }
      else {
-      // echo "Error al momento de insertar";
-       // header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
+    //   echo "Error al momento de insertar";
+        header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
      }
  
 
- 
+
 
 
 

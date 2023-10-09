@@ -595,29 +595,54 @@ else {
               <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Universidad Autónoma de Chihuahua - Requisición </h2>
-
+                  <div class="well well-sm no-shadow small">
+               
+                   <h1> ORDEN DE COMPRA EVENTUALIDADES</h1>
+                    <h2>Universidad Autónoma de Chihuahua - Facultad de Ingeniería</h2>
+                 
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
 
-                    <section class="content invoice">
+                    <section class="content invoice ">
                       <!-- title row -->
                         <div class="row">
-                            <div class="col-xs-6  invoice-header">
+                            <div class="col-xs-6  invoice-header ">
 
 
-                            <img src="images/uach.png" alt="" width="40%">
+                            <img src="images/uach.png" alt="" width="40%"> |  &nbsp;&nbsp; <img src="images/fing-escudo.svg" alt="" width="15%">
 
                                                             
                             </div>
 
                             <div class="col-xs-6  invoice-header">
-                            <h3>
-                            <small class="pull-right primary">Folio: <?php echo $id;?></small><br>
-                            <small class="pull-right">Fecha: <?php echo $newDateString;?></small>
-                            </h3>
+
+                            <?php
+
+                                  $id = $_GET['id'];
+
+                                  $sql5 = "SELECT * FROM movdEventualidades WHERE idRequisiciones2023 = $id";
+
+                                  //  echo  $sql5;
+                                  $result = $conexion->query($sql5);
+
+
+                                  if ($result->num_rows > 0) {
+                                  }
+                                  $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                                  $NoOrdenEventualidad = $row['idmovdEventualidades'];
+                                  $FechaE = $row['FechaOrdenEventualidad'];
+
+
+
+                            ?>
+                         
+                            <small class="pull-right primary">Folio Eventualidad: <?php echo $NoOrdenEventualidad;?></small><br>
+                            <small class="pull-right primary">Requisición: <?php echo $id;?></small><br>
+                            <small class="pull-right">Fecha Requisición: <?php echo $newDateString;?></small><br>
+                            <small class="pull-right">Fecha Eventualidad: <?php echo  date("d/M/Y", strtotime($FechaE));?></small>
+                          
 
                           </div>
                        
@@ -671,8 +696,7 @@ else {
 
                       <div class="row">
                       <div class="col-sm-12 invoice-col  ">
-                      <strong>Motivos Requisición</strong> : <?php echo $motivos;?> <br>
-                      </div>
+                                            </div>
 
                       <!-- Table row -->
                       <div class="ln_solid"></div>
@@ -687,6 +711,8 @@ else {
                             <th class="column-title mediuu" style="display: table-cell;">Cantidad </th>
                             <th class="column-title mediuu" style="display: table-cell;">Unidad </th>
                             <th class="column-title mediuu " style="display: table-cell;">Descripción</th>
+                            <th class="column-title mediuu " style="display: table-cell;">Costo Unitario</th>
+                            <th class="column-title mediuu " style="display: table-cell;">Subtotal</th>
                               </tr>
                             </thead>
                             <tbody class="mediuu">
@@ -711,6 +737,9 @@ else {
                           $count = 1;
 
                           while ($row = $resultado->fetch_assoc()) {
+                            $subtotal1 =   $row["Precio"]*$row["Cantidad"] ;
+                           
+                          
 
                               echo '
                                       <tr class="even pointer paddingTable">
@@ -719,12 +748,14 @@ else {
                                       <td class="small">' . $row["Cantidad"] . '</td>
                                       <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
                                       <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
-
+                                      <td class=" ">' . $row["Precio"] . '</td>
+                                      <td class=" ">$' .number_format($subtotal1, 2). '</td>
                                       </td>
                                     </tr>
                                     ';
 
                                     $count++;
+                                    $SubTotalF += $subtotal1;
                           }
 
                           ?>
@@ -733,44 +764,187 @@ else {
 
                             </tbody>
                           </table>
+
                           
-                          <p class="well well-sm no-shadow small">Observaciones: <?php echo $observaciones;?></p>
+                       
 
                           <table class="table table-bordered text-center small">
+
+                          
+<thead>
+  <tr class="text-center">
+  
+    <th class="text-center">SUBTOTAL</th>
+    <th class="text-center">IMPUESTOS</th>
+    <th class="text-center">TOTAL</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+  
+  </tr>
+  <tr>
+    <td><b>$<?php echo number_format($SubTotalF, 2) ;?></b></td>
+
+    <td><b><?php 
+
+
+
+
+ 
+
+        $id = $_GET['id'];
+
+        $sql5 = "SELECT * FROM movdEventualidades WHERE idRequisiciones2023 = $id";
+
+      //  echo  $sql5;
+        $result = $conexion->query($sql5);
+       
+
+        if ($result->num_rows > 0) {
+        }
+        $row = $result->fetch_array(MYSQLI_ASSOC);
+
+        $ImpuestoSQL = $row['idTipoImpuesto'];
+
+        $Proveedor = $row['Proveedor'];
+
+        $NoOrdenEventualidad = $row['idmovdEventualidades'];
+
+        //echo "IMPUESTO<br>".$ImpuestoSQL;
+
+
+        switch ($ImpuestoSQL) {
+          case '1':
+            # IVA NORMAL 16
+            $TAXESS = 0.16;
+            break;
+
+            case '2':
+              # RESICO
+              $TAXESS = 0.025;
+              break;
+
+              case '3':
+                # SIN IVA
+                $TAXESS = 0;
+                break;
+          
+          default:
+            # code...
+            break;
+        }
+
+        if($ImpuestoSQL == 1){
+
+          
+        $ImpuestoPrint = $SubTotalF * $TAXESS;
+        echo "$".number_format($ImpuestoPrint, 2) ;
+
+        } elseif ($ImpuestoSQL == 2) 
+        {
+          $retencionRESICO = $SubTotalF * $TAXESS;
+          $IVA = $SubTotalF * 0.16;
+
+          echo "$"."IVA:  ".number_format($IVA, 2)."<br>" ;
+          echo "$"."RETENCIÓN:  ".number_format($retencionRESICO, 2)."<br>" ;
+        }
+        else{
+
+
+
+        }
+
+    
+    
+    
+    ?></b></td>
+
+    <td><b><?php 
+
+        if($ImpuestoSQL == 1){
+
+                  
+          echo "$".number_format($SubTotalF+$ImpuestoPrint, 2) ;
+
+          } elseif ($ImpuestoSQL == 2) 
+          {
+
+            echo "$".number_format($SubTotalF+$IVA-$retencionRESICO, 2) ;
+           
+          }
+          else{
+
+            echo "$".number_format($SubTotalF, 2) ;
+
+          }
+
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    ?></b></td>
+  </tr>
+ 
+</tbody>
+</table>
+
+<p class="well well-sm no-shadow small" > <b>PROVEEDOR: <?php 
+
+
+$id = $_GET['id'];
+
+$sql5 = "SELECT * FROM movdEventualidades WHERE idRequisiciones2023 = $id";
+
+//  echo  $sql5;
+$result = $conexion->query($sql5);
+
+
+if ($result->num_rows > 0) {
+}
+$row = $result->fetch_array(MYSQLI_ASSOC);
+
+$ImpuestoSQL = $row['idTipoImpuesto'];
+
+$Proveedor = $row['Proveedor'];
+
+$ObservacionesEventualidades = $row['ObservacionesEventualidades'];
+
+
+
+echo $Proveedor;?></b></p>
+
+<p class="well well-sm no-shadow small">OBSERVACIONES EVENTUALIDAD: <?php echo $ObservacionesEventualidades;?> </p>
+
+                          <table class="table table-bordered text-center small">
+
+                          
                       <thead>
                         <tr class="text-center">
                         
-                          <th class="text-center">Solicitó</th>
-                          <th class="text-center">Revisó</th>
-                          <?php
-                            if ($Centro == '4407 - LABORATORIO DE SANITARIA') 
-                            {
-                              echo '<th class="text-center">Revisó</th>';
-                            }
-                          
-                          ?>
-                          <th class="text-center">Autorizó</th>
+                          <th class="text-center">FIRMA PROVEEDOR</th>
+                          <th class="text-center">FIRMA UNIDAD DE COMPRAS</th>
+                   
                         </tr>
                       </thead>
                       <tbody>
                       <tr>
                           <td><br></td>
                           <td><br></td>
-                          <td><br></td>
+      
                         </tr>
                         <tr>
-                          <td><?php echo $solicitantePrint;?><br></td>
-                          <?php
-                            if ($Centro == '4407 - LABORATORIO DE SANITARIA') 
-                            {
-                              echo     '<td>JACOBO CHAVEZ<br></td>';
-                            }
-                          
-                          ?>
-                          <td><?php echo $Reviso;?><br></td>
+                          <td><br></td>
+                        
+                          <td><?php echo $NombreUsuario;?><br></td>
 
                  
-                          <td><?php echo $Autorizo;?><br></td>
+                         
                         </tr>
                        
                       </tbody>
@@ -855,7 +1029,7 @@ else {
 
     </script>
 
-    
+
 <script>
 
 

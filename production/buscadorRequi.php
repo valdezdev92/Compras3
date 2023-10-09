@@ -12,17 +12,21 @@ $username = $_SESSION['username'];
 
 $sql = "SELECT * FROM Usuarios WHERE Usuario = '$username'";
 
+
 $result = $conexion->query($sql);
 
+
 if ($result->num_rows > 0) {
-}
-$row = $result->fetch_array(MYSQLI_ASSOC);
+ }
+ $row = $result->fetch_array(MYSQLI_ASSOC);
 
 $Centro = $row['Centro'];
 $idUsuario = $row['IdUsuario'];
-$NombreUsuario = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
+$NombreUsuario = $row['PrimerNombre'].' '.$row['PrimerApellido'];
 
-?>
+
+
+ ?>
 
 
 
@@ -50,7 +54,7 @@ $NombreUsuario = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
   <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
   <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-
+  
 
   <!-- Custom Theme Style -->
   <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -151,7 +155,7 @@ $NombreUsuario = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Captura de Orden de compra  <small></small></h2>
+                    <h2>Mostrar Requis <small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -171,106 +175,166 @@ $NombreUsuario = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
                   </div>
                   <div class="x_content">
                     <br />
+                    <form id="demoform5" data-parsley-validate class="form-horizontal form-label-left" action="verRequisBuscador.php" method="post" name="EditRequi">
 
                       <?php
 
-if (isset($_GET['Mensaje'])) {
-    $Folio = $_GET['Folio'];
+                            if (isset($_GET['Mensaje']))
+                            {
+                                $Folio=$_GET['Folio'];
 
-    switch ($_GET['Mensaje']) {
-        case 'Correcto':
+                                switch ($_GET['Mensaje'])
+                                {
+                                  case 'Correcto':
 
-            echo
+                                  echo
 
-                '
+                                  '
 
                                   <div class="alert alert-info alert-dismissable">
                                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                  <p style="font-size:20px;">Requi No.' . $Folio . ' Agregada Exitosamente.   </p>
+                                  <p style="font-size:20px;">Requi No.'.$Folio.' Agregada Exitosamente.   </p>
 
                                   </div>
 
 
 
                                   ';
-            # code...
-            break;
+                                    # code...
+                                    break;
 
-        case 'Modificada-Correcto':
 
-            echo
+                                    case 'Modificada-Correcto':
 
-                '
+                                    echo
+
+                                    '
 
                                     <div class="alert alert-success alert-dismissable">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <p style="font-size:20px;">Requi No.' . $Folio . ' Modificada Correctamente</p>
+                                    <p style="font-size:20px;">Requi No.'.$Folio.' Modificada Correctamente</p>
 
                                     </div>
 
 
 
                                     ';
-            # code...
-            break;
+                                      # code...
+                                      break;
 
-        case 'YaExiste':
 
-            echo
 
-                '
+                                                                      case 'YaExiste':
+
+                                                                      echo
+
+                                                                      '
 
                                                                       <div class="alert alert-warning alert-dismissable">
                                                                       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                                                      <p style="font-size:20px; color:black;">Orden de Compra No.' . $Folio . ' Ya Existe en la BD</p>
+                                                                      <p style="font-size:20px;">Requi No.'.$Folio.' Ya Existe en la BD</p>
 
                                                                       </div>
 
 
 
                                                                       ';
-            # code...
-            break;
+                                                                        # code...
+                                                                        break;
 
-        default:
-            # code...
-            break;
-    }
+                                  default:
+                                    # code...
+                                    break;
+                                }
 
-}
 
-?>
-                    <form id="FormOC" data-parsley-validate class="form-horizontal form-label-left" action="capturaOC-1.php" method="post" name="capturaOC-1">
+
+
+
+                          }
+
+
+
+
+
+
+
+
+                                         ?>
+
+                        <?php
+                            $query = "SELECT * FROM Requisiciones2023 ";
+                            $resultado=$conexion->query($query);
+
+                       ?>
 
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Fondo"> Numero de Orden de Compra
-                        </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="Orden"  class="form-control col-md-7 col-xs-12" placeholder="Numero de Orden de Compra" name="OrdenCompra" value="" onkeypress="return validarLetras(event)" maxlength="300"
-                                onpaste="return true">
-                            </div>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Numero de Requi</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="form-control" name="idRequi" id="idRequi">
+                          <option value="0">SELECCIONE UNA REQUI</option>
+                          <?php while($row = $resultado->fetch_assoc()) { ?>
+                            <option value="<?php echo $row['idRequisiciones2023']; ?>"><?php echo $row['idRequisiciones2023'].'-'.strtoupper($row['motivoSolicitud']); ?></option>
+                            <?php } ?>
+                          </select>
                         </div>
                       </div>
-                     </div>
+
+
+
+
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Fondo"> Numero de Requi 
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="Motivos"  class="form-control col-md-7 col-xs-12" placeholder="Numero requisición..." name="idRequi2" value="" onkeypress="return validarLetras(event)" maxlength="300"
+                            onpaste="return true">
+
+
+
+                        </div>
+                      </div>
+
+          
+                      </div>
+
+
+
+                      <div class="form-group">
+                    
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                        </div>
+                      </div>
+                  </div>
 
                 </div>
               </div>
             </div>
+
+
             <!-- Final -->
+
+
+
+
                   <div class="ln_solid"></div>
+
                   <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button class="btn btn-lg btn-primary" type="button">Cancel</button>
 						  <button class="btn btn-lg btn-primary" type="reset">Reset</button>
-                          <input type="submit" name="" class="btn btn-lg btn-success" value="Siguiente ->" id="ValidarForm">
+              <input type="submit" name="" class="btn btn-lg btn-success" value="Siguiente ->" id="ValidarForm">
                         </div>
                       </div>
+
+       
+
+
                   </form>
+
+
                 </div>
               </div>
             </div>
@@ -340,13 +404,43 @@ if (isset($_GET['Mensaje'])) {
 
     <script type="text/javascript">
       $(document).ready(function() {
+        $("#Cuenta").change(function() {
+
+          // alert('holi');
+
+          // $('#cbx_localidad').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+
+          $("#Cuenta option:selected").each(function() {
+            Cuenta = $(this).val();
+            $.post("getSubCuenta.php", {
+              Cuenta: Cuenta
+            }, function(data) {
+              $("#SubCuenta").html(data);
+            });
+          });
+        });
 
 
+       
 
 
       });
 
+      function updateChar() {
 
+        var zone = document.getElementById("Area");
+
+        if (zone.value == "2") {
+
+          alert("You clicked Zone 1.");
+
+          $(function() {
+            $("#Funcion").val('0')
+          });
+        }
+      }
+
+      
 
     </script>
 

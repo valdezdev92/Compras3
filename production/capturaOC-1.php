@@ -8,7 +8,27 @@ include '../TopNavigation.php';
 include '../Scripts.php';
 require '../ConexionDB.php';
 
-$OrdenCompra = $_POST['OrdenCompra']; 
+$OrdenCompra = $_POST['OrdenCompra'];
+
+
+$sql = "SELECT NoOrden  FROM movdOrdenCompra WHERE NoOrden = $OrdenCompra";
+$resultado=$conexion->query($sql);
+
+
+
+   if ($resultado->num_rows > 0)
+   {
+      echo "Existe";
+      header('Location: capturaOC.php?Mensaje=YaExiste');
+    }
+    else {
+    //  echo "no existe";
+    }
+  //  $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+    //$OrdenCompra = $row['NoOrden'];
+
+
 
 
 ?>
@@ -85,12 +105,12 @@ $OrdenCompra = $_POST['OrdenCompra'];
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">No Orden
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="NoOrden" name="NoOrden" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo $OrdenCompra?>" disabled>
+                          <input type="text" id="NoOrden" name="NoOrden" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo $OrdenCompra?>" readonly>
                         </div>
                       </div>
 
-                      
-  
+
+
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha <span class="required"></span>
                         </label>
@@ -100,7 +120,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
                       </div>
 
 
-                      <div class="form-group"> 
+                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Proveedor
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -190,7 +210,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
                         </div>
                       </div>
 
-                      
+
                       <?php
                             $query = "SELECT * FROM catcLicitaciones";
                             $resultado=$conexion->query($query);
@@ -233,7 +253,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
                           </select>
                         </div>
                       </div>
- 
+
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">COMPRA / PAGO</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -243,7 +263,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
 
                             <option value="1">ORDEN DE COMPRA</option>
                             <option value="2">ORDEN DE PAGO</option>
-              
+
                           </select>
                         </div>
                       </div>
@@ -252,16 +272,16 @@ $OrdenCompra = $_POST['OrdenCompra'];
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Total
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="Proveedor" name="Proveedor" required="required" placeholder="$ Total Neto "  class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="Monto" name="Monto" required="required" placeholder="$ Total Neto "  class="form-control col-md-7 col-xs-12">
                         </div>
-                        
+
                       </div>
 
-                   
 
-                      
 
-                      
+
+
+
 
 
 
@@ -288,7 +308,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
               <!-- Final Contenido END WALDORF -->
 
 
-                  <div class="ln_solid"></div>       
+                  <div class="ln_solid"></div>
 
         </div>
       </div>
@@ -351,7 +371,7 @@ $OrdenCompra = $_POST['OrdenCompra'];
     <script src="../build/js/custom.min.js"></script>
 
   </body>
-  
+
 
   <script>
 

@@ -24,6 +24,38 @@ $NombreUsuario = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
 
 $id = $_GET['id'];
 
+
+$sqlEOC = "SELECT * FROM movdRequisiciones2023 a INNER JOIN movdEventualidades b on a.idRequisiciones2023 = b.idRequisiciones2023 INNER JOIN TipoImpuesto c on b.idTipoImpuesto = c.idTipoImpuesto  WHERE a.idRequisiciones2023 = $id";
+$resultEOC = $conexion->query($sqlEOC);
+$row = $resultEOC->fetch_array(MYSQLI_ASSOC);
+
+//echo "<br> SQL = consulta para obtener datos de la OC EV    ".$sqlEOC;
+
+
+$FechaOrdenEventualidad = $row['FechaOrdenEventualidad'];
+$ObservacionesEventualidades = $row['ObservacionesEventualidades'];
+$idTipoImpuesto = $row['idTipoImpuesto'];
+$DesidTipoImpuesto = $row['DescripcionImpuesto'];
+$Proveedor = $row['Proveedor'];
+
+
+
+
+
+
+
+
+////--- Proceso de copiar el contenido de movdRequisiciones2023 a movdeventualidades
+
+
+
+
+
+///-------
+
+
+
+
 ?>
 
 
@@ -345,6 +377,7 @@ $idLicitacion = $row['idLicitacion'];
                             <th class="column-title" style="display: table-cell;">Cantidad </th>
                             <th class="column-title" style="display: table-cell;">Unidad </th>
                             <th class="column-title" style="display: table-cell;">Descripción</th>
+                            <th class="column-title" style="display: table-cell;">Precio</th>
                             <th class="column-title no-link last" style="display: table-cell;"><span class="nobr">Acción</span></th>
 
                           </tr>
@@ -371,6 +404,7 @@ $resultado = $conexion->query($sql);
 //echo $sql;
 
 $Count = 0;
+$Subtotal = 0;
 while ($row = $resultado->fetch_assoc()) {
 
     $Count++;
@@ -388,6 +422,7 @@ while ($row = $resultado->fetch_assoc()) {
                           <td class=" ">' . $row["Cantidad"] . '</td>
                           <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
                           <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
+                          <td class=" ">' . $row["Precio"] . '</td>
                           <td class=" "> <a class="btn btn-danger btn-sm" href="DelProd2.php?idmovd=' . $row["idmovdRequisiciones2023"] . '&id=' . $id . '"> Eliminar</a></td>
 
                           </td>
@@ -395,6 +430,10 @@ while ($row = $resultado->fetch_assoc()) {
 
 
                         ';
+
+                        $Subtotall = $row["Cantidad"] * $row["Precio"];
+                        $Subtotal2 += $Subtotall;
+
 
 
 
@@ -424,11 +463,11 @@ while ($row = $resultado->fetch_assoc()) {
 
                     <?php
                      // echo ' <a href="registroObjetosRequi3.php?id='.$id.'"><button class="btn btn-warning pull-right " style="margin-right: 5px;"><i class="fa fa-pencil"></i> Modificar</button></a>';
+//              <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Agregar Partidas</button>
 
 
                    ?>
 
-              <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Agregar Partidas</button>
 
 
 
@@ -646,8 +685,44 @@ echo $id;?>" style="display:none;">
              </div>
 
 
+<!-- seccion para poner subtotales y ivas y etc START -->
+<!--
+<div class="row">
+
+<div class="col-md-6 col-xs-12 ">
 
 
+</div>
+
+<div class="col-md-6 col-xs-12  ">
+
+                          <div class="table-responsive">
+                            <table class="table">
+                              <tbody>
+                                <tr>
+                                  <th style="width:50%">Subtotal:</th>
+                                  <td><input type="text" value="" id="SUBT" name="SUBT" readonly></td>
+                                </tr>
+                                <tr>
+                                  <th>Impuesto</th>
+                                  <td><input type="text" value="" id="TAX" name="TAX" readonly></td>
+                                </tr>
+
+                                <tr>
+                                  <th>Total:</th>
+                                  <td><input type="text" value="" id="TOTAL" name="TOTAL" readonly></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
+</div> -->
+
+
+
+
+<!-- seccion para poner subtotales y ivas y etc END -->
 
 
                   <div class="ln_solid"></div>
@@ -660,19 +735,51 @@ echo $id;?>" style="display:none;">
 
 <!-- Inicio -->
 
+
+<form action="ModcrearFormatoEventualidad.php" method="POST" name="EvenForm" >
+<div class="row">
+
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="x_panel">
+                    <div class="row no-print">
+                          <div class="col-xs-12">
+                          <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha Orden Eventualidad</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                        <!-- <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio"  id="Folio" value="" placeholder="Numero en color rojo en el formato" required> -->
+
+
+
+
+                          <input type="text" class="form-control" id="single_cal2" placeholder="" name="Fecha" value="<?php echo $FechaOrdenEventualidad?>">
+                          <input type="text" name="subtotalPre" value="<?php echo $Subtotal2; ?>" style="display:none;">
+
+
+
+                        </div>
+                        </div>
+
+                </div>
+
+
+
+
+  </div>
+</div>
+
 <!-- comentarios START -->
 
 <div class="row">
-<form action="crearFormatoAdq.php" method="POST" name="AdqForm" >
+
   <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="row no-print">
                         <div class="col-xs-12">
                         <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones dentro de formato ADQ</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones Orden de Compra Eventualidad</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
 
-                      <textarea name="Observaciones" class="resizable_textarea form-control" placeholder="Observaciones en el fondo del formato"></textarea>
+                      <textarea name="ObservacionesEventualidad" class="resizable_textarea form-control" placeholder="Observaciones en el fondo del formato"><?php echo $ObservacionesEventualidades; ?></textarea>
                       <input type="text" name="id" style="display:none;" value="<?php echo $id; ?>">
 
 
@@ -708,21 +815,101 @@ echo $id;?>" style="display:none;">
                   <div class="row no-print">
                         <div class="col-xs-12">
                         <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">FOLIO UNIDAD CENTRAL</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">SELECCION DE IMPUESTOS</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio"  id="Folio" value="" placeholder="Numero en color rojo en el formato" required>
+                      <!-- <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio"  id="Folio" value="" placeholder="Numero en color rojo en el formato" required> -->
+                      <select name="impuesto" id="impuesto" class="form-control" >
+
+                      <?php
+                                  
+
+                               switch ($idTipoImpuesto) {
+                                case 1:
+                                    echo '
+                                    <option value="1" selected >IVA</option>
+                                    <option value="2" >RESICO</option>
+                                    <option value="3">SIN IVA</option>
+                                    ';
+                                break;
+
+                                case 2:
+                                    echo '
+                                    <option value="1"  >IVA</option>
+                                    <option value="2" selected>RESICO</option>
+                                    <option value="3">SIN IVA</option>
+                                    ';
+                                break;
+
+                                case 3:
+                                    echo '
+                                    <option value="1"  >IVA</option>
+                                    <option value="2" >RESICO</option>
+                                    <option value="3" selected>SIN IVA</option>
+                                    ';
+                                break;
+
+                                default:
+                                    # code...
+                                    break;
+                               }
+
+                                
+                                ?>
+                
+                      </select>
                       </div>
                       </div>
 
               </div>
 
 
-              </form>
+
 
 </div>
 </div>
 
 
+
+<div class="row">
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="row no-print">
+                        <div class="col-xs-12">
+                        <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">PROVEEDOR</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input list="resultados" class="form-control col-md-7 col-xs-12"  name="Proveedor"  id="busqueda" value="<?php echo $Proveedor;?>" placeholder="Nombre Proveedor" autocomplete="off" oninput="procesarTexto(this)" required >
+                      <datalist id="resultados">
+
+                      </datalist>
+
+
+
+
+
+
+
+
+
+                      </div>
+                      </div>
+
+              </div>
+
+
+
+
+</div>
+</div>
+
+
+
+
+
+<!-- fin del formulario set  -->
+
+</form>
 
 
 <!-- ultima parte para guardar START -->
@@ -736,7 +923,7 @@ echo $id;?>" style="display:none;">
 
                   <div class="row no-print">
                         <div class="col-xs-12">
-                        <button class="btn btn-primary btn-block btn-lg" id="save" style="margin-right: 5px;"><i class="fa fa-save"></i> ENVIAR ADQ</button>
+                        <button class="btn btn-success btn-block btn-lg" id="save" style="margin-right: 5px;"><i class="fa fa-check"></i>  GENERAR OC EVENTUALIDAD</button>
                         </div>
                       </div>
 
@@ -802,19 +989,52 @@ echo $id;?>" style="display:none;">
     <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
     <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
 
+        <!-- bootstrap-daterangepicker -->
+        <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link href="../vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+
+     <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+
+
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 
+
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- bootstrap-datetimepicker -->
+    <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="jquery.tabledit.js"></script>
 
 
 
+<script>
+
+
+
+$('#single_cal2').datetimepicker({
+    format: 'YYYY-MM-DD'
+});
+
+
+  </script>
 
 
 <script>
     $(document).ready(function(){
+
+
+
+
+
+
+
 
 
       $("#ObjetoGasto").change(function() {
@@ -823,7 +1043,7 @@ echo $id;?>" style="display:none;">
             $("#ObjetoGasto option:selected").each(function() {
               ObjetoGasto = $(this).val();
               Licitacion = <?php echo $idLicitacion; ?>;
-              $.post("getSubProductoO.php", {
+              $.post("getSubProducto.php", {
                 ObjetoGasto: ObjetoGasto,
                 Licitacion: Licitacion
               }, function(data) {
@@ -874,10 +1094,10 @@ echo $id;?>" style="display:none;">
         removeButton: false,
         columns: {
           identifier: [0, 'id'],
-          editable: [[1, 'Objeto'],[2, 'Cantidad'], [3, 'unidadMedidaTraducida'], [4, 'Descripcion']]
+          editable: [[1, 'Objeto'],[2, 'Cantidad'], [3, 'unidadMedidaTraducida'], [4, 'Descripcion'], [5, 'Precio']]
         },
         hideIdentifier: true,
-        url: 'editarCelda.php'
+        url: 'editarCelda6.php'
     });
 
 
@@ -890,20 +1110,38 @@ echo $id;?>" style="display:none;">
 
       if (confirm("Crear Formato!") == true) {
 
-        var Folio  =   $('#Folio').val();
+        //var Folio  =   $('#Folio').val();
 
-               // alert('Folio '+Folio);
+        var Impuesto  =   $('#impuesto').val();
+        var Fecha  =   $('#single_cal2').val();
+        var Proveedor  =   $('#Proveedor').val();
 
-                    if (Folio != '' )
-                    {
-                      document.AdqForm.submit();
-
-                    }else {
-
-                      alert('El numero rojo no puede ir vacio');
+              alert('Fecha '+Fecha);
 
 
-                    }
+               if (Impuesto == 0 )
+                {
+                  alert('Debe seleccionar un tipo de impuesto');
+                }
+                else if (Fecha == "")
+                {
+                  alert('Debe seleccionar una fecha');
+                }
+
+                else if (Proveedor == "")
+                {
+                  alert('Debe escribir el nombre del proveedor');
+                }
+                else {
+                 document.EvenForm.submit();
+                    // alert('Correcto'+Impuesto);
+                  // alert("enviar");
+
+                }
+
+
+
+
 
         } else {
           alert('Pendinete...');
@@ -920,6 +1158,45 @@ echo $id;?>" style="display:none;">
 
 
 });
+
+</script>
+
+<script>
+$(document).ready(function () {
+$('#busqueda').keyup(function () {
+var termino = $(this).val();
+if (termino != '') {
+$.ajax({
+url: 'buscarProveedor.php',
+method: 'GET',
+data: { termino: termino },
+dataType: 'json',
+success: function (data) {
+   $('#resultados').empty();
+   $.each(data, function (key, value) {
+       $('#resultados').append(`<option value="${value}"`);
+   });
+}
+});
+} else {
+$('#resultados').empty();
+}
+});
+});
+
+function procesarTexto(input) {
+    // Obtén el valor actual del campo de entrada
+    let valor = input.value;
+
+    // Reemplaza comillas simples y dobles por una cadena vacía
+    valor = valor.replace(/['"]/g, '');
+
+    // Convierte el texto a mayúsculas
+    valor = valor.toUpperCase();
+
+    // Establece el valor del campo de entrada sin comillas y en mayúsculas
+    input.value = valor;
+}
 
 </script>
 

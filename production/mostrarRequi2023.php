@@ -265,9 +265,10 @@ if (isset($_GET['Mensaje'])) {
 
 <?php
 
-$sqlinfo = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN movdObservacionesRequi i on a.idRequisiciones2023 = i.idRequisiciones2023 WHERE a.idRequisiciones2023 = '$id'";
+$sqlinfo = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN movdObservacionesRequi i on a.idRequisiciones2023 = i.idRequisiciones2023 INNER JOIN catcLicitaciones ww on a.idLicitacion = ww.idLicitacion WHERE a.idRequisiciones2023 = '$id'";
 
- // echo $sqlinfo;
+ 
+//echo $sqlinfo;
 $result = $conexion->query($sqlinfo);
 if ($result->num_rows > 0) {
 }
@@ -284,6 +285,7 @@ $fecha = $row['Fecha'];
 $motivos = $row['motivoSolicitud'];
 $solicitantePrint = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
 $servicioExterno = $row['DescripcionServicioExterno'];
+$descripcionLicitacion = $row['descripcionLicitacion'];
 
 $myDateTime = DateTime::createFromFormat('Y-m-d', $fecha);
 $newDateString = $myDateTime->format('d/M/Y');
@@ -400,6 +402,12 @@ $observaciones = $row['ObservacionesRequi']
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Solicitante </label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                         <input type="text" class="form-control"  readonly value="<?php echo $solicitantePrint; ?>">
+                        </div>
+
+                        
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Licitación </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                        <input type="text" class="form-control"  readonly value="<?php echo $descripcionLicitacion; ?>">
                         </div>
                       </div>
 

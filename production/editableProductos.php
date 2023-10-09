@@ -478,7 +478,7 @@ if ($conexion->connect_error) {
 
 
 
-$sql = "SELECT * FROM catcProductos WHERE idLicitacion = 0 AND Activo <> 0 ORDER BY idObjetoGasto";
+$sql = "SELECT * FROM catcProductos WHERE idLicitacion = 0 AND Activo <> 0 ORDER BY descripcionProducto";
 $resultado = $conexion->query($sql);
 
 //echo $sql;
@@ -512,17 +512,13 @@ while ($row = $resultado->fetch_assoc()) {
 
 ?>
 
-             <a href=""></a>
+
 
 
                         </tbody>
                       </table>
 
-                    /////-------
 
-
-
-                    //////--------
                     </div>
 
 
@@ -623,12 +619,12 @@ while ($row = $resultado->fetch_assoc()) {
 
 
     <script type="text/javascript">
-      $('#datatable').dataTable({
+      $('#datatable5').dataTable({
         'iDisplayLength': 10
       });
     </script>
 
- 
+
 
 
     <script type="text/javascript">

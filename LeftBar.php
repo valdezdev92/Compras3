@@ -18,26 +18,23 @@ if ( ($NombreUsuario == 'lrvaldez' )   || ($NombreUsuario == 'mfloresd' )  || ($
 
   $MaterialCotizar = '';
   $Registro = '<li><a href="index.php"><i class="fa fa-area-chart"></i> Estadisticas</a></li>';
-  $ConsultaAutorizacion = '<li><a href="pendienteRecibir2.php"><i class="fa fa-check-circle-o"></i> Pendientes Recibir </a></li>  <li><a href="pendienteAutorizar.php"><i class="fa fa-check-circle"></i> Pendientes Autorizar </a></li>';
+  $ConsultaAutorizacion = '<li><a href="pendienteRecibir2.php"><i class="fa fa-check-circle-o"></i> Pendientes Recibir </a></li>  <li><a href="pendienteAutorizar.php"><i class="fa fa-check-circle"></i> Pendientes Autorizar </a></li>  <li><a href="eventualidadOC.php"><i class="fa fa-briefcase"></i> Generar Eventualidad OC </a></li>  <li><a href="SolReembolsoADM.php"><i class="fa fa-money"></i> Solicitud de Reembolso </a></li> ';
   $Cotizar = '';
   $Reportes ='' ;
   $Intrucciones ='<li><a href="info.php"><i class="fa fa-question"></i> Instrucciones </a></li>';
   $Busqueda ='<li><a href="busqueda.php"><i class="fa fa-search"></i> Busqueda </a></li>';
   $Historico ='<li><a href="capturaOC.php"><i class="fa fa-briefcase"></i> Captura OC </a></li>
+  <li><a href="repOrdenCompra.php"><i class="fa fa-briefcase"></i> Ordenes de COMPRA</a></li>
+  <li><a href="vincularOrdenRequi.php?id=1"><i class="fa fa-briefcase"></i> Vinculo</a></li>
+
   <li><a href="editableUsuarios.php"><i class="fa fa-pencil"></i>Editar Requis </a></li>
-  <li><a href="editableProductos.php"><i class="fa fa-pencil"></i> Estitar Catalogo </a></li>
-  <li><a href="Categorias.php?id=1"><i class="fa fa-pencil"></i>Editar Categorias</a></li>';
+  <li><a href="editableProductos.php"><i class="fa fa-pencil"></i> Editar Catalogo </a></li>
+  <li><a href="Categorias.php?id=1"><i class="fa fa-pencil"></i>Editar Categorias</a></li>
+  <li><a href="buscadorRequi.php"><i class="fa fa-check"></i> Buscardor REQUI </a></li>'
+  ;
   $Inventario =' ' ;
-$ADQF = '
-
-
-  <li><a href="EnviarADQUF.php"><i class="fa fa-cart-plus"></i>Enviar ADQ UF</a></li>
-  <li><a href="EnviarADQUFMIX.php"><i class="fa fa-cart-plus"></i>Enviar ADQ UF MIX</a></li>
-
-
-
-
-';
+$ADQF = '<li><a href="EnviarADQUF.php"><i class="fa fa-cart-plus"></i>Enviar ADQ UF</a></li>
+  <li><a href="EnviarADQUFMIX.php"><i class="fa fa-cart-plus"></i>Enviar ADQ UF MIX</a></li>';
 
 
 
@@ -74,6 +71,7 @@ else {
   $Busqueda ='';
   $Historico ='';
   $Inventario ='<li><a href="TablaCLimpieza2023.php"><i class="fa fa-paint-brush"></i> Tabla Art-Limp PT-1 </a></li><li><a href="TablaCLimpieza20232.php"><i class="fa fa-magic"></i> Tabla Art-Limp PT-2 </a></li><li><a href="TablaCafeteria2023.php"><i class="fa fa-coffee"></i> Tabla Cafeteria PT-3 </a></li><li><a href="TablaPapeleria2023.php"><i class="fa fa-book"></i> Tabla Papeleria PT-1 </a></li><li><a href="TablaPapeleria22023.php"><i class="fa fa-book"></i> Tabla Papeleria PT-2 </a></li>';
+  $ADQF="";
 
 }
 

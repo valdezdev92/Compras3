@@ -66,7 +66,7 @@ if ($conexion->connect_error) {
 
 
 $sql1="SELECT * FROM movdRequisiciones2023 a INNER JOIN Requisiciones2023 b on a.idRequisiciones2023 = b.idRequisiciones2023 WHERE a.idmovdRequisiciones2023 = $idMovdRequi";
-echo $sql1;
+//echo $sql1;
 $result = $conexion->query($sql1);
 
 if ($result->num_rows > 0)  {}
@@ -122,6 +122,7 @@ if ($result->num_rows > 0)
     )
 
     ';
+    echo $sql2;
 
    if($conexion->query($sql2))
    {
@@ -155,12 +156,12 @@ if ($result->num_rows > 0)
    }else {
     echo "Error Waldorf";
 
-    echo $sql3;
+   // echo $sql3;
    }
 
 
    }else {
-    echo "Error al insertar";
+    echo "Error al insertar 1";
    }
 
    

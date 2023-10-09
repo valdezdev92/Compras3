@@ -27,7 +27,7 @@ $id = $_GET['id'];
 ?>
 
 
- 
+
 
 
 
@@ -194,9 +194,9 @@ if (isset($_GET['Mensaje'])) {
 
                 '
 
-      <div class="alert alert-info alert-dismissable">
+      <div class="alert alert-success alert-dismissable">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <p style="font-size:20px;">Requi No.' . $id . ' Agregada Exitosamente.   </p>
+      <p style="font-size:20px;">Requi No.' . $id . ' Completada Exitosamente.   </p>
 
       </div>
 
@@ -265,9 +265,10 @@ if (isset($_GET['Mensaje'])) {
 
 <?php
 
-$sqlinfo = "SELECT *,a.Estatus AS RequiEstatus   FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno  INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion INNER JOIN movdRequisiciones2023FormAdq z on a.idRequisiciones2023 = z.idRequisiciones2023  WHERE a.idRequisiciones2023 = '$id'";
+$sqlinfo = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN movdObservacionesRequi i on a.idRequisiciones2023 = i.idRequisiciones2023 INNER JOIN catcLicitaciones ww on a.idLicitacion = ww.idLicitacion WHERE a.idRequisiciones2023 = '$id'";
 
-// echo $sqlinfo;
+ 
+//echo $sqlinfo;
 $result = $conexion->query($sqlinfo);
 if ($result->num_rows > 0) {
 }
@@ -284,19 +285,12 @@ $fecha = $row['Fecha'];
 $motivos = $row['motivoSolicitud'];
 $solicitantePrint = $row['PrimerNombre'] . ' ' . $row['PrimerApellido'];
 $servicioExterno = $row['DescripcionServicioExterno'];
+$descripcionLicitacion = $row['descripcionLicitacion'];
 
 $myDateTime = DateTime::createFromFormat('Y-m-d', $fecha);
 $newDateString = $myDateTime->format('d/M/Y');
-
-$id = $_GET['id'];
-$Folio = $row['Folio'];
-$editable = $row['RequiEstatus'];
-
-$Licitacion = $row['Licitacion'] . ' ' . $row['descripcionLicitacion'];
-
-$idLicitacion = $row['idLicitacion'];
-
-// echo $editable;
+$editable = $row['EstatusRequi'];
+$observaciones = $row['ObservacionesRequi']
 
 ?>
 
@@ -402,17 +396,6 @@ $idLicitacion = $row['idLicitacion'];
                         <input type="text" class="form-control"  readonly value="<?php echo $servicioExterno; ?>">
                         </div>
 
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Licitación </label>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <input type="text" class="form-control"  readonly value="<?php echo $Licitacion; ?>">
-                        </div>
-
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Folio ADQ UF</label>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <input type="text" class="form-control" name="Folio"  readonly value="<?php echo $Folio; ?>">
-                        </div>
-
-
 
 
 
@@ -420,345 +403,36 @@ $idLicitacion = $row['idLicitacion'];
                         <div class="col-md-4 col-sm-4 col-xs-12">
                         <input type="text" class="form-control"  readonly value="<?php echo $solicitantePrint; ?>">
                         </div>
-                      </div>
 
-
-
-                      <div class="ln_solid"></div>
-
-                      
-
-
-                    </form>
-
-                    <div class="row">  
-
-                    <?php 
-                        if ($editable == "Modificable") 
-                        {
-                          echo '<a href="ModRegistroObjetosRequi.php?id='.$id.'"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
-                        }else {
-                          echo '<button class="btn btn-warning pull-right" disabled><i class="fa fa-pencil"></i> Modificar</button>';
-                        }
-                    
-                    ?>
-
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-
-            <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Registro de partidas <small></small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-
-
-                  </div>
-                  <div class="x_content">
-                    <br />
-                   
-
-
-
-
-
-
-                      <?php
-            
-                           $query = 'SELECT * FROM Requisiciones2023 Where idProceso != 80 '; 
-                          // echo  $query;
-                     
-                           $resultado = $conexion->query($query);
-
-?>
-
- 
-
-                      <div class="x_content">
-                    <br>
-
-
-                      <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="ObjetoGasto" id="ObjetoGasto">
-                            <option value="0">Seleccione la Requi</option>
-
-
-                            <?php while ($row = $resultado->fetch_assoc()) {?>
-                            <option value="<?php echo $row['idRequisiciones2023']; ?>"><?php echo $row['idRequisiciones2023']; ?></option>
-                            <?php }?>
-                          </select>
-
-                      </div>
-
-             
-                     
-
-                      <form id="demoform2" data-parsley-validate class="form-horizontal form-label-left" action="AddProductoMIX.php" method="post" name="AddproductoForm">
-
-
-                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="Producto" id="Producto">
-                            <option value="0">Seleccione una producto</option>
-
-
-                          </select>
-
-                      </div>
-
-
-                      <div class="clearfix"></div>
-
-                      <div class="ln_solid"></div>
-
-
-                      <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
-echo $id;?>" style="display:none;">
-
-<input type="text" class="form-control" id="Folio"  name="Folio" value="<?php $id = $_GET['id'];
-echo $id;?>" style="display:none;">
-
-
-
-                            </form>
-
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-
-                            <?php 
-                        if ($editable == "Modificable") 
-                        {
-                          echo '<button type="button" class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
-                        }else {
-                          echo '<button type="button" disabled class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>';
-                        }
-                    
-                    ?>
-
-
-
+                        
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Licitación </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                        <input type="text" class="form-control"  readonly value="<?php echo $descripcionLicitacion; ?>">
                         </div>
 
-                  </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              
+                      </div>
 
 
-            <!-- Final -->
+                      </form>
+<div class="row">
+                      <?php
+                          $id = $_GET['id'];
+                          echo '<a href="ModRegistroObjetosRequi4.php?id=' . $id . '"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
+                           ?>
+                           </div>
+                      <div class="ln_solid"></div>
 
-
-                  <!-- modals -->
-                  <!-- Large modal -->
-
-<div class="modal fade bs-example-modal-lg2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">Registro</h4>
-      </div>
-      <div class="modal-body">
-      <div class="container">
-        
-      <?php
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
-         $resultado = $conexion->query($query);
-
-        ?>
-
-
-
-        <div class="x_content">
-      <br>
-      <form class="form-horizontal form-label-left input_mask" action="registroProductoCatalogo.php" method="post"  name="registroProductoCatalogoForm">
-
-        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-        <select class="form-control" name="ObjetoGastoRegistro" id="ObjetoGastoRegistro">
-              <option value="0">SELECCIONE UN OBJETO DEL GASTO</option>
-
-
-              <?php while ($row = $resultado->fetch_assoc()) {?>
-              <option value="<?php echo $row['idObjetoGasto']; ?>"><?php echo $row['idObjetoGasto'] . ' - ' . $row['descripcionObjetoGasto']; ?></option>
-              <?php }?>
-            </select>
-
-        </div>
-
-        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-          <input type="text" class="form-control" id="DescripcionProductoRegistro" name="DescripcionProductoRegistro" placeholder="Descripción del producto" onkeyup="mayus(this)">
-          <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
-echo $id;?>" style="display:none;">
-          <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-        </div>
-
-
-        <div class="clearfix"></div>
-
-<div class="ln_solid"></div>
-
-
-
-
-
-        <div class="form-group">
-          <div class="col-md-12 col-sm-12 col-xs-12 ">
-
-            <button type="button" class="btn btn-danger btn-block" id="RegP">Registrar</button>
-          </div>
-        </div>
-
-      </form>
-    </div>
-
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-                 
-
-
-
-  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-      <div class="container">
-      <table id="datatable2" class="table table-striped table-bordered">
-                                    <thead>
-                                      <tr>
-                                        <th>Objeto del gasto</th>
-                                        <th>Descripción</th>
-
-
-
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-
-                                      <?php
-
-$host_db = "localhost";
-$user_db = "root";
-$pass_db = "sr1920la";
-$db_name = "Compras3";
-$conexion = new mysqli($host_db, $user_db, $pass_db, $db_name);
-
-if ($conexion->connect_error) {
-    die("La conexion falló: " . $conexion->connect_error);
-}
-
-$sql = 'SELECT * FROM catcProductos order by idObjetoGasto';
-$resultado = $conexion->query($sql);
-
-while ($row = $resultado->fetch_assoc()) {
-
-    echo '
-                                                 <tr>
-                                                   <td> ' . $row["idObjetoGasto"] . ' </td>
-                                                   <td>' . $row["descripcionProducto"] . '</td>
-
-                                                </tr>
-                                                 ';
-}
-?>
-
-                                    </tbody>
-                                  </table>
-         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-                  <!-- /modals -->
-
-
-
-
-                  <div class="ln_solid"></div>
-
-
-
-             <div class="row">
-             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2 id="partidas">Partidas registradas </h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-
-                  <div class="x_content">
-
-                    <p>Aqui se muestran todos los productos que se han seleccionado</p>
-
-                    <div class="table-responsive">
-                      <table id="data_table" class="table table-striped jambo_table bulk_action">
+                      <div class="row">
+                      <div class="table-responsive">
+                      <table class="table table-bordered">
                         <thead>
                           <tr class="headings">
-                          <th class="column-title" style="display: table-cell;">No. </th>
+
                             <th class="column-title" style="display: table-cell;">Objeto del gasto </th>
                             <th class="column-title" style="display: table-cell;">Cantidad </th>
                             <th class="column-title" style="display: table-cell;">Unidad </th>
                             <th class="column-title" style="display: table-cell;">Descripción</th>
-                            <th class="column-title no-link last" style="display: table-cell;"><span class="nobr">Acción</span></th>
 
                           </tr>
                         </thead>
@@ -778,41 +452,31 @@ if ($conexion->connect_error) {
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM movdTempRequiMIX  WHERE idRequisiciones2023 = $id";
+$sql = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
 $resultado = $conexion->query($sql);
 
 //echo $sql;
 
-$Count = 0;
 while ($row = $resultado->fetch_assoc()) {
 
-  $Count++;
-
-                    
-                          echo '
+    echo '
 
 
 
 
 
-                          <tr class="even pointer" id="'.$row["idmovdRequisiciones2023"].'">
-   
-                          <td class=" ">' . $row["idmovdRequisiciones2023"] . '</td>
-                          <td class=" ">' . $row["idObjetoGasto"] . '</td>
-                          <td class=" ">' . $row["Cantidad"] . '</td>
-                          <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
-                          <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
-                          <td class=" "> <a class="btn btn-danger btn-sm" href="DelProdMIX.php?idpmovd=' . $row["idmovdRequisiciones2023"] . '&id=' . $id . '"> Eliminar</a></td>
-             
-                          </td>
-                        </tr>
-             
-             
-                        ';
+             <tr class="even pointer">
 
-                     
+             <td class=" ">' . $row["idObjetoGasto"] . '</td>
+             <td class=" ">' . $row["Cantidad"] . '</td>
+             <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
+             <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
 
-   
+             </td>
+           </tr>
+
+
+           ';
 }
 
 ?>
@@ -822,47 +486,83 @@ while ($row = $resultado->fetch_assoc()) {
 
                         </tbody>
                       </table>
-                    </div>
+                      </div>
+
+                
 
 
+
+               
                   </div>
                 </div>
-              </div>
-             </div>
+
+
+
+
+
+            
+<!-- final de la primera seccion -->
+
+    
+
+
+            
 
 
 
 
 
 
-                  <div class="ln_solid"></div>
 
-
-                  <div class="row">
-
-<div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="row no-print">
-                        <div class="col-xs-12">
-                        <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">FOLIO UNIDAD CENTRAL</label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio" id="Folio"  value="" placeholder="Numero en color rojo en el formato" required>
-                      </div>
-                      </div>
-                     
-              </div>
-
-
-              </form>
-
-</div>
-</div>
 
 
                 <div class="row">
 
 <!-- Inicio -->
+
+<!-- comentarios START -->
+
+<div class="row">
+
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="row no-print">
+                        <div class="col-xs-12">
+                        <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <div class="col-md-12 col-lg-12 col-sm-12">
+                      <!-- blockquote -->
+                      <blockquote>
+                        <p><?php echo $observaciones;?></p>
+                        <footer><?php echo $solicitantePrint;?> <cite title="Source Title"><?php echo $departamentoSolicitante;?></cite>
+                        </footer>
+                      </blockquote>
+
+              
+                    </div>
+                    
+                    
+                    
+                    </div>
+                  </div>
+                        </div>
+                      </div>        
+              </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+<!-- Comentarios END -->
 
 
 
@@ -871,17 +571,14 @@ while ($row = $resultado->fetch_assoc()) {
 
 <div class="row">
 
-<div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                  
              
 
                   <div class="row no-print">
                         <div class="col-xs-12">
-                         <button class="btn btn-primary btn-block btn-lg" style="margin-right: 5px;" id="next"><i class="fa fa-download"></i> SIGUIENTE</button>
-                         <a href="ReporteADQMIX.php?id=<?php echo $id;?>"> <button class="btn btn-danger btn-block btn-lg" id="save" style="margin-right: 5px;"><i class="fa fa-save"></i> VER FORMATO ADQ UF</button></a>
-
-                       
+                       <a href="printRequi2023.php?id=<?php echo $id;?>" target="_blank"> <button class="btn btn-primary pull-right btn-lg" id="print"  style="margin-right: 5px;"><i class="fa fa-print"></i> IMPRIMIR</button></a>
                         </div>
                       </div>
           
@@ -892,9 +589,18 @@ while ($row = $resultado->fetch_assoc()) {
 
 </div>
 
-<!-- ultima parte para guardar  END-->
+
+
+
+
 
 </div>
+
+
+<!-- ultima parte para guardar  END-->
+
+
+
 </div>
 
 
@@ -952,12 +658,10 @@ while ($row = $resultado->fetch_assoc()) {
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
-    <script src="jquery.tabledit.js"></script>
-
 
     <script type="text/javascript">
       $('#datatable').dataTable({
-        'iDisplayLength': 10
+        'iDisplayLength': 100
       });
     </script>
 
@@ -966,29 +670,13 @@ while ($row = $resultado->fetch_assoc()) {
 
     <script type="text/javascript">
       $(document).ready(function() {
-
-
-        $('#data_table').Tabledit({
-        editButton: true,    
-        removeButton: false,
-        columns: {
-          identifier: [0, 'id'],                    
-          editable: [[1, 'Objeto'],[2, 'Cantidad'], [3, 'Unidad'], [4, 'Descripcion']]
-        },
-        hideIdentifier: true,
-        url: 'editarCelda5.php'      
-    });
-
-
         $("#ObjetoGasto").change(function() {
 
 
           $("#ObjetoGasto option:selected").each(function() {
-            Requi = $(this).val();
-            Licitacion = <?php echo $idLicitacion;?>;
-            $.post("getSubPartidaMIX.php", {
-              ObjetoGasto: Requi,
-              Licitacion: Licitacion
+            ObjetoGasto = $(this).val();
+            $.post("getSubProducto.php", {
+              ObjetoGasto: ObjetoGasto
             }, function(data) {
               $("#Producto").html(data);
             });
@@ -1055,38 +743,20 @@ while ($row = $resultado->fetch_assoc()) {
 
 });
 
-$('#next').on('click', function(){
-
-// alert("hihihi");
-
-<?php
-
-$sql = "SELECT * FROM movdTempRequiMIX WHERE idRequisiciones2023 = $id";
-$resultado = $conexion->query($sql);
-$row = mysqli_num_rows($resultado);
-echo 'var Count ='.$row.';';
-
- 
-?>
-
-var Folio = $('#Folio').val();
-// alert('hihi'+Count);
 
 
-if (Count == 0)
-{
-  alert('No Existen productos en la requisicion, favor de agregar productos');
-}
+          $('#printy').on('click', function(){
 
-else {
-
-  window.location.href = 'observacionesGuardarMIXset.php?id=<?php echo $id;?>&Folio='+Folio;
-
-}
+      
+           <?php echo  "window.location.href = 'printRequi2023.php?id=$id'";?>
 
 
 
-});
+          });
+
+
+
+
 
 
 

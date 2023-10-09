@@ -76,13 +76,11 @@ $('#datatable').dataTable({
               <div class="clearfix"></div>
             <div class="row">
 
-              <!-- Inicio -->
-              <!-- button table -->
 
-              <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Pendinete Enviar a Unidad Central</h2>
+                    <h2>Requisiciones Autorizadas - GENERAR EVENTUALIDAD</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -150,7 +148,7 @@ $('#datatable').dataTable({
                                 if ($conexion->connect_error) {
                                     die("La conexion falló: " . $conexion->connect_error);
                                 }
-                                $sql = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion WHERE idProceso = 4 ";
+                                $sql = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion WHERE idProceso = 4 ORDER BY a.idRequisiciones2023 DESC ";
                                 $resultado = $conexion->query($sql);
 
                             
@@ -171,7 +169,7 @@ $('#datatable').dataTable({
 
                                         echo '
                                         <tr>
-                                            <td class="text-center"><a href="ReporteADQset.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-dedault "><i class="fa fa-university"></i>  Enviar</button></td></a>
+                                            <td class="text-center"><a href="eventualidadOC-2.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-success "><i class="fa fa-university"></i> Eventualidad</button></td></a>
                                             <td class="text-center"><b>'.$row['idRequisiciones2023'].'</b></td>
                                             <td>'.$newDateString.'</td>
                                             <td>'.$solicitantePrint.'</td>
@@ -199,12 +197,16 @@ $('#datatable').dataTable({
                 </div>
               </div>
 
+           
+             
+
               <div class="clearfix"></div>
-              <!-- SEPARADANDO EN MEDIO -->
+   
+
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Enviadas a Unidad Central</h2>
+                    <h2>Requisiciones Autorizadas - GENERAR EVENTUALIDAD</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -249,9 +251,10 @@ $('#datatable').dataTable({
                                 <thead>
                                     <tr>
                                         <th>OPCIONES</th>
-                                        <th>FOLIO F</th>
-                                        <th>FECHA DE ENVIO </th>
+                                        <th>FOLIO</th>
+                                        <th>FECHA</th>
                                         <th>DEP. SOLICITANTE</th>
+                                        <th>SOLICITANTE</th>
                                         <th>CATEGORÍA</th>
                                         <th>MOTIVOS</th>
                                      
@@ -271,7 +274,8 @@ $('#datatable').dataTable({
                                 if ($conexion->connect_error) {
                                     die("La conexion falló: " . $conexion->connect_error);
                                 }
-                                $sql = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion INNER JOIN movdRequisiciones2023FormAdq k on a.idRequisiciones2023 = k.idRequisiciones2023 WHERE a.idProceso = 6 ";
+                               // echo $sql;
+                                $sql = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion WHERE idProceso = 8 ORDER BY a.idRequisiciones2023 DESC ";
                                 $resultado = $conexion->query($sql);
 
                             
@@ -281,7 +285,7 @@ $('#datatable').dataTable({
                                     while ($row = $resultado->fetch_assoc())
                                      {
 
-                                        $fecha = $row['FechaEnvio'];
+                                        $fecha = $row['Fecha'];
                                         $myDateTime = DateTime::createFromFormat('Y-m-d', $fecha);
                                         $newDateString = $myDateTime->format('d/M/Y');
                                         $departamentoSolicitante = $row['descripcionUnidadPresupuestal'];
@@ -292,13 +296,11 @@ $('#datatable').dataTable({
 
                                         echo '
                                         <tr>
-                                            <td class="text-center">
-                                            <a href="ReporteADQ.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-primary "><i class="fa fa-search"></i></button></a><a href="ModReporteADQ.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-warning "><i class="fa fa-pencil"></i></button></a>
-
-                                            </td>
+                                            <td class="text-center"><a href="eventualidadOC-3.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-warning "><i class="fa fa-pencil"></i>Edit</button></a> <a target="_balnk" href="printOCEventualidad.php?id='.$row['idRequisiciones2023'].'"><button class="btn btn-primary "><i class="fa fa-eye"></i>Ver</button></a></td>
                                             <td class="text-center"><b>'.$row['idRequisiciones2023'].'</b></td>
                                             <td>'.$newDateString.'</td>
-                                            <td>'.$solicitantePrint.' - <br> '.$departamentoSolicitante.'</td>
+                                            <td>'.$solicitantePrint.'</td>
+                                            <td>'.$departamentoSolicitante.'</td>
                                             <td>'.$categorias.'</td>
                                             <td>'.$motivos.'</td>
                            
@@ -322,14 +324,7 @@ $('#datatable').dataTable({
                 </div>
               </div>
 
-
-            
-              <!--  Excel table end-->
-
-
-<!-- eclet table -->
-
-<!--  Excel table end-->
+   
 
 
 
@@ -417,7 +412,7 @@ $(document).ready(function() {
 
     </script>
 
-    
+
 <?php
 
 
@@ -427,7 +422,7 @@ if (isset($_GET['bridge'])) {
   $id = $_GET['id'];
 
   // URL de la página a la que deseas redirigir
-$paginaNueva = "ReporteADQ.php?id=$id";
+$paginaNueva = "printOCEventualidad.php?id=$id";
 
 // Redirige a la nueva página en una nueva pestaña
 echo '<script>window.open("' . $paginaNueva . '", "_blank");</script>';
@@ -439,8 +434,7 @@ echo '<script>window.open("' . $paginaNueva . '", "_blank");</script>';
 }
 
 ?>
-
-
+ 
 
   </body>
 </html>

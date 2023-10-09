@@ -76,13 +76,15 @@ INSERT INTO catcProductos(
 
     idObjetoGasto,
     descripcionProducto,
-    idLicitacion
+    idLicitacion,
+    Activo
 
 )
 VALUES( 
     '.$ObjetoGasto.',
     "'.$Producto.'",
-    0
+    0,
+    1
 
 
 )';

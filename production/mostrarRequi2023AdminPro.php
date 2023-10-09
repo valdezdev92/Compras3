@@ -193,7 +193,7 @@ $id = $_GET['id'];
 
 $sqlinfo = "SELECT *, a.Estatus AS EstatusRequi FROM Requisiciones2023 a INNER JOIN DepartamentoSolicitante b on a.idDepartamentoSolicitante = b.idDepartamentoSolicitante INNER JOIN Proyecto c on a.idProyecto = c.idProyecto INNER JOIN FuenteFinanciamiento d on a.idFuenteFinanciamiento = d.idFuenteFinanciamiento  INNER JOIN Convenios e on a.idConvenio = e.idConvenio INNER JOIN catCategorias f on a.idcatCategoria = f.idcatCategorias INNER JOIN Usuarios g on a.idUsuario = g.idUsuario INNER JOIN servicioExterno h on a.idServicioExterno = h.idServicioExterno INNER JOIN catcLicitaciones j on a.idLicitacion = j.idLicitacion WHERE idRequisiciones2023 = '$id'";
 
- //echo $sqlinfo;
+// echo $sqlinfo;
 $result = $conexion->query($sqlinfo);
 if ($result->num_rows > 0) {
 }
@@ -216,8 +216,6 @@ $newDateString = $myDateTime->format('d/M/Y');
 $editable = $row['EstatusRequi'];
 
 $Licitacion = $row['Licitacion'] . ' ' . $row['descripcionLicitacion'];
-
-$idLicitacion = $row['idLicitacion'];
 
 ?>
 
@@ -299,7 +297,7 @@ $idLicitacion = $row['idLicitacion'];
                       <div class="row">
 
                     <?php
-                        echo '<a href="ModRegistroObjetosRequi3.php?id=' . $id . '"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
+                        echo '<a href="ModRegistroObjetosRequi4.php?id=' . $id . '"><button class="btn btn-warning pull-right"><i class="fa fa-pencil"></i> Modificar</button></a>';
                       ?>
                     </div>
                   </div>
@@ -307,8 +305,7 @@ $idLicitacion = $row['idLicitacion'];
 
                 <div class="ln_solid"></div>
 
-
-                <div class="row">
+             <div class="row">
              <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -330,309 +327,63 @@ $idLicitacion = $row['idLicitacion'];
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-
                   <div class="x_content">
-
-                    <p>Aqui se muestran todos los productos que se han seleccionado</p>
-
                     <div class="table-responsive">
-                      <table id="data_table" class="table table-striped jambo_table bulk_action">
+                      <table class="table table-bordered" id="data_table" >
                         <thead>
                           <tr class="headings">
-                          <th class="column-title" style="display: table-cell;">No. </th>
-
-                            <th class="column-title" style="display: table-cell;">Objeto del gasto </th>
-                            <th class="column-title" style="display: table-cell;">Cantidad </th>
-                            <th class="column-title" style="display: table-cell;">Unidad </th>
-                            <th class="column-title" style="display: table-cell;">Descripción</th>
-                            <th class="column-title no-link last" style="display: table-cell;"><span class="nobr">Acción</span></th>
-
+                            <th>id</th>
+                            <th >Objeto</th>
+                            <th >Cantidad </th>
+                            <th>Unidad </th>
+                            <th >Descripcion</th>
                           </tr>
                         </thead>
                         <tbody>
 
                         <?php
 
-$host_db = "localhost";
-$user_db = "root";
-$pass_db = "sr1920la";
-$db_name = "Compras3";
-$conexion = new mysqli($host_db, $user_db, $pass_db, $db_name);
+                            $host_db = "localhost";
+                            $user_db = "root";
+                            $pass_db = "sr1920la";
+                            $db_name = "Compras3";
+                            $conexion = new mysqli($host_db, $user_db, $pass_db, $db_name);
+                            if ($conexion->connect_error) {
+                                die("La conexion falló: " . $conexion->connect_error);
+                            }
 
-if ($conexion->connect_error) {
-    die("La conexion falló: " . $conexion->connect_error);
-}
+                            $id = $_GET['id'];
+                            $sql = "SELECT *, a.idObjetoGasto AS Objeto FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
+                            $resultado = $conexion->query($sql);
 
-$id = $_GET['id'];
+                            //echo $sql;
 
-$sql = "SELECT * FROM movdRequisiciones2023 a INNER JOIN catcUnidadesMedida b on a.idcatcUnidadesMedida = b.idcatcUnidadesMedida INNER JOIN catcProductos c on a.idProducto = c.idProducto WHERE a.idRequisiciones2023 = $id";
-$resultado = $conexion->query($sql);
+                            while ($row = $resultado->fetch_assoc()) {
+                                echo '
+                                <tr id="' . $row["idmovdRequisiciones2023"] . '">
+                                <td>' . $row["idmovdRequisiciones2023"] . '</td>
+                                <td>' . $row["Objeto"] . '</td>
+                                <td>' . $row["Cantidad"] . '</td>
+                                <td>' . $row["unidadMedidaTraducida"] . '</td>
+                                <td>' . $row["descripcionProductoRequi"] . '</td>
+                                </tr>
 
-//echo $sql;
-
-$Count = 0;
-while ($row = $resultado->fetch_assoc()) {
-
-    $Count++;
-
-
-        echo '
-
-
-
-
-
-                          <tr class="even pointer" id="' . $row["idmovdRequisiciones2023"] . '">
-                          <td class=" ">' . $row["idmovdRequisiciones2023"] . '</td>
-                          <td class=" ">' . $row["idObjetoGasto"] . '</td>
-                          <td class=" ">' . $row["Cantidad"] . '</td>
-                          <td class=" ">' . $row["unidadMedidaTraducida"] . '</td>
-                          <td class=" ">' . $row["descripcionProductoRequi"] . '</td>
-                          <td class=" "> <a class="btn btn-danger btn-sm" href="DelProd2.php?idmovd=' . $row["idmovdRequisiciones2023"] . '&id=' . $id . '"> Eliminar</a></td>
-
-                          </td>
-                        </tr>
-
-
-                        ';
-
-
-
-}
-
-?>
-
-             <a href=""></a>
-
-
+                                      ';
+                            }
+                            ?>
                         </tbody>
                       </table>
                     </div>
-
-
-                  </div>
-                </div>
-              </div>
-             </div>
-
-
-             <div class="ln_solid"></div>
-
-
+                    <div class="ln_solid"></div>
+                   
                     <div class="row">
 
 
                     <?php
-                     // echo ' <a href="registroObjetosRequi3.php?id='.$id.'"><button class="btn btn-warning pull-right " style="margin-right: 5px;"><i class="fa fa-pencil"></i> Modificar</button></a>';
+                      //echo ' <a href="registroObjetosRequi3.php?id='.$id.'"><button class="btn btn-warning pull-right " style="margin-right: 5px;"><i class="fa fa-pencil"></i> Modificar</button></a>';
+                    ?>
 
-
-                   ?>
-
-              <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Agregar Partidas</button>
-
-
-
-
-
-    <!-- inicio modal agregar partidas -->
-              <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-
-                      <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Registro de partidas | Objeto del Gasto / Cantidad / Unidad / Descripción<small></small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-
-
-                  </div>
-                  <div class="x_content">
-                    <br />
-                    <form id="demoform2" data-parsley-validate class="form-horizontal form-label-left" action="AddProductoMASTER.php" method="post" name="AddproductoForm">
-
-
-
-
-
-
-                      <?php
-//  $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
-
-switch ($idLicitacion) {
-
-    case '2':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '3':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '4':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
-        break;
-
-    case '5':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 216';
-        break;
-
-    case '6':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 221';
-        break;
-
-    case '7':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 211';
-        break;
-
-    case '8':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '9':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '10':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '11':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '12':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '13':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    case '14':
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo" AND idObjetoGasto = 214';
-        break;
-
-    default:
-        $query = 'SELECT * FROM catcObjetoGasto WHERE Estatus = "Activo"';
-        break;
-}
-
-$resultado = $conexion->query($query);
-
-?>
-
-
-
-                      <div class="x_content">
-                    <br>
-
-
-                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="ObjetoGasto" id="ObjetoGasto">
-                            <option value="0">Seleccione un objeto del gasto</option>
-
-
-                            <?php while ($row = $resultado->fetch_assoc()) {?>
-                            <option value="<?php echo $row['idObjetoGasto']; ?>"><?php echo $row['idObjetoGasto'] . ' - ' . $row['descripcionObjetoGasto']; ?></option>
-                            <?php }?>
-                          </select>
-
-                      </div>
-
-                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control" id="Cantidad" placeholder="Cantidad" name="Cantidad" onkeypress="return valida(event)" onpaste="return true">
-
-                      </div>
-
-                      <?php
-// $query = 'SELECT * FROM catcUnidadesMedida';
-
-if ($idLicitacion != 1) {
-    $query = 'SELECT * FROM catcUnidadesMedida';
-} else {
-    $query = 'SELECT * FROM catcUnidadesMedida';
-
-}
-
-$resultado = $conexion->query($query);
-
-?>
-
-                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="unidadMedida" id="unidadMedida">
-                            <option value="0">Seleccione una unidad de medida</option>
-
-
-                            <?php while ($row = $resultado->fetch_assoc()) {?>
-                            <option value="<?php echo $row['idcatcUnidadesMedida']; ?>"><?php echo $row['descripcionUnidadMedida']; ?></option>
-                            <?php }?>
-                          </select>
-
-                      </div>
-
-
-
-                      <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                      <select class="form-control" name="Producto" id="Producto">
-                            <option value="0">Seleccione una producto</option>
-
-
-                          </select>
-
-                      </div>
-
-
-                      <div class="clearfix"></div>
-
-                      <div class="ln_solid"></div>
-
-
-                      <input type="text" class="form-control" id="idRequi"  name="idRequi" value="<?php $id = $_GET['id'];
-echo $id;?>" style="display:none;">
-
-
-
-                            </form>
-
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-
-
-<button type="button" class="btn btn-success pull-right" id="AddP"><i class="fa fa-plus"></i>   Añadir</button>
-
-
-
-
-                            <!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-search"></i>   Ver Catalogo</button>
-                            <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target=".bs-example-modal-lg2"><i class="fa fa-pencil"></i> Registrar </button>
-                            <a href="Clasificador.pdf" target="_blank"><button type="button" class="btn btn-default pull-right"><i class="fa fa-search"></i>Clasificador</button></a> -->
-
-                        </div>
-
-
-
-
-
-                      </div>
-                    </div>
-                  </div>
-<!-- fin modal agregar partidas -->
-
+ 
 
 
 
@@ -662,34 +413,7 @@ echo $id;?>" style="display:none;">
 
 <!-- comentarios START -->
 
-<div class="row">
-<form action="crearFormatoAdq.php" method="POST" name="AdqForm" >
-  <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="row no-print">
-                        <div class="col-xs-12">
-                        <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones dentro de formato ADQ</label>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
 
-                      <textarea name="Observaciones" class="resizable_textarea form-control" placeholder="Observaciones en el fondo del formato"></textarea>
-                      <input type="text" name="id" style="display:none;" value="<?php echo $id; ?>">
-
-
-
-                    </div>
-
-
-
-                  </div>
-                        </div>
-                      </div>
-              </div>
-
-
-
-
-</div>
 
 
 
@@ -701,26 +425,6 @@ echo $id;?>" style="display:none;">
 <!-- Comentarios END -->
 
 
-<div class="row">
-
-<div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="row no-print">
-                        <div class="col-xs-12">
-                        <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">FOLIO UNIDAD CENTRAL</label>
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                      <input  class="form-control col-md-7 col-xs-12" type="text" name="Folio"  id="Folio" value="" placeholder="Numero en color rojo en el formato" required>
-                      </div>
-                      </div>
-
-              </div>
-
-
-              </form>
-
-</div>
-</div>
 
 
 
@@ -736,7 +440,7 @@ echo $id;?>" style="display:none;">
 
                   <div class="row no-print">
                         <div class="col-xs-12">
-                        <button class="btn btn-primary btn-block btn-lg" id="save" style="margin-right: 5px;"><i class="fa fa-save"></i> ENVIAR ADQ</button>
+                        <a href="printRequi2023.php?id=<?php echo $id;?> " target="_blank"><button class="btn btn-primary btn-block btn-lg"  style="margin-right: 5px;"><i class="fa fa-print"></i>IMPRIMIR</button></a>
                         </div>
                       </div>
 
@@ -817,56 +521,6 @@ echo $id;?>" style="display:none;">
     $(document).ready(function(){
 
 
-      $("#ObjetoGasto").change(function() {
-
-
-            $("#ObjetoGasto option:selected").each(function() {
-              ObjetoGasto = $(this).val();
-              Licitacion = <?php echo $idLicitacion; ?>;
-              $.post("getSubProductoO.php", {
-                ObjetoGasto: ObjetoGasto,
-                Licitacion: Licitacion
-              }, function(data) {
-                $("#Producto").html(data);
-              });
-            });
-            });
-
-            $('#AddP').on('click', function(){
-
-                // alert("hihihi");
-
-                var Objeto  =   $('#ObjetoGasto').val();
-                var Cantidad  =   $('#Cantidad').val();
-                var Unidad  =   $('#unidadMedida').val();
-                var Producto  =   $('#Producto').val();
-
-                if (Objeto == 0)
-                {
-                  alert('Debe seleccionar un objeto del gasto');
-                }
-                else if (Cantidad == '')
-                {
-                  alert('Debe tener una cantidad');
-                }
-                else if (Unidad == 0)
-                {
-                  alert('Debe seleccionar una unidad');
-                }
-                else if (Producto == 0)
-                {
-                  alert('Debe seleccionar un producto');
-                }
-                else {
-                  document.AddproductoForm.submit();
-
-                }
-
-
-
-                });
-
-
 
 
     $('#data_table').Tabledit({
@@ -879,8 +533,6 @@ echo $id;?>" style="display:none;">
         hideIdentifier: true,
         url: 'editarCelda.php'
     });
-
-
 
 
 
@@ -897,14 +549,14 @@ echo $id;?>" style="display:none;">
                     if (Folio != '' )
                     {
                       document.AdqForm.submit();
-
+                     
                     }else {
 
                       alert('El numero rojo no puede ir vacio');
-
-
+                      
+                      
                     }
-
+       
         } else {
           alert('Pendinete...');
         }
@@ -912,9 +564,6 @@ echo $id;?>" style="display:none;">
 
 
       });
-
-
-
 
 
 

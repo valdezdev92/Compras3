@@ -37,11 +37,7 @@ session_start();
 
 $username = $_SESSION['username'];
 
-
-
-
-
-$observaciones = $_POST['Observaciones'] ;
+$observaciones = $_POST['ObservacionesEventualidad'] ;
 
 //echo ' Motivos:'.$Motivos;
 
@@ -53,65 +49,83 @@ $observaciones = $AUX;
 
 $id= $_POST['id'];
 
-// echo '<BR> $idUsuario  :'.$idUsuario ;
+
+$impuesto= $_POST['impuesto'];
+
+$Fecha = $_POST['Fecha'];
+
+$Proveedor = $_POST['Proveedor'];
+
+$subtotalPre = $_POST['subtotalPre'];
+
+
+//echo "<br>Fecha". $Fecha;
 
 
 
-$FechaEntregaObs = $_POST['FechaEntregaObs'];
-$PersonaEntregar = $_POST['PersonaEntregar'];
-$TelefonoEntrega = $_POST['TelefonoEntrega'];
-
-echo $FechaEntregaObs.'<br>';
-echo $PersonaEntregar.'<br>';
-echo $TelefonoEntrega.'<br>';
+//echo '<BR> Impuesto  :'.$impuesto ;
 
 
+//$Folio= $_POST['Folio'];
 
 
+// $hoy = getdate();
+// $d = $hoy['mday'];
+//   $m = $hoy['mon'];
+//   $y = $hoy['year'];
+
+//     $d2= date("d");
+//     $m2= date("m");
+//     $y2= date("y");
+
+// $FechaEnvio = "$y/$m2/$d2";
 
 
-$sql22 = "SELECT * FROM  movdObservacionesRequi  WHERE idRequisiciones2023 = $id";
-$resultado22 = $conexion->query($sql22);
+switch ($impuesto) {
+  case 1:
+  $Monto = $subtotalPre * 1.16;
 
-if (mysqli_num_rows($resultado22) > 0) {
-  // La consulta devolvió al menos una fila
- // $row = $resultado22->fetch_array(MYSQLI_ASSOC);
+    break;
 
-  //$observacionesGuardadas = $row['ObservacionesRequi'];
+    case 2:
+    $retencion = $subtotalPre *0.025;
+    $Monto = $subtotalPre * 1.16;
+    $Monto = $Monto - $retencion;
+      break;
 
-  $sql='UPDATE movdObservacionesRequi SET ObservacionesRequi="'.$observaciones.'" WHERE idRequisiciones2023 = '.$id.'';
+      case 3:
+          $Monto = $subtotalPre;
+        break;
 
-} else {
-  // La consulta no devolvió resultados
- 
-  
-$sql='
-INSERT INTO movdObservacionesRequi(
-
-    idRequisiciones2023,
-    ObservacionesRequi
-)
-VALUES(
-  '.$id.',
-  "'.$observaciones.'"
-)';
-
-
-
+  default:
+    // code...
+    break;
 }
 
 
+//echo "Monto_".$Monto;
+
+
+$sql="
+UPDATE
+    movdEventualidades
+SET
+    ObservacionesEventualidades = '$observaciones',
+    FechaOrdenEventualidad = '$Fecha',
+    idTipoImpuesto = $impuesto,
+    Proveedor = '$Proveedor',
+    Monto = $Monto
+
+
+
+WHERE
+    idRequisiciones2023 = $id";
 
 
 
 
-
-
-
-
-
-echo "<br>";
-echo $sql;
+//echo "<br>";
+//echo $sql;
 
 
 
@@ -126,51 +140,52 @@ echo $sql;
   die("La conexion falló: " . $conexion->connect_error);
  }
 
- // se inserta la requisicion en la tabla Requisiciones2023
+ // se inserta en la tabla de movimientos de eventualidades
 
-//  $resultado = $conexion->query($sql);
+ //$resultado = $conexion->query($sql);
 
 
-//echo $sql;
+echo $sql;
      if ($conexion->query($sql) )
      {
 
 
-           
 
-      
+
+
 
            $sql = '
-           
+
 UPDATE
     Requisiciones2023
 SET
     Estatus = "NoModificable",
-    idProceso = 2,
-    FechaEntregaObs = "'.$FechaEntregaObs.'",
-    PersonaEntregar = "'.$PersonaEntregar.'",
-    TelefonoEntrega = "'.$TelefonoEntrega.'"
-
+    idProceso = 8
 WHERE
 idRequisiciones2023 = '.$id.'
-           
-           
+
+
            ';
 
-           echo $sql;
+
+
+         //echo $sql;
 
            $result = $conexion->query($sql);
 
 
-           
 
-           header('Location: mostrarRequi2023.php?Mensaje=Correcto&id='.$id.'');
+
+
+         header('Location: eventualidadOC.php?id='.$id.'&bridge=1');
+         
      }
      else {
-      // echo "Error al momento de insertar";
+   echo "Error al momento de insertar";
+  //   header('Location: printOCEventualidad.php?id='.$id.'');
         // header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
      }
- 
+
 
 
 

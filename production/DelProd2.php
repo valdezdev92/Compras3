@@ -40,60 +40,28 @@ $username = $_SESSION['username'];
 
 
 
+$idMovrequi = $_GET['idmovd'] ;
 
-$observaciones = $_POST['Observaciones'] ;
-
-//echo ' Motivos:'.$Motivos;
-
-$AUX = addslashes($observaciones);
-
-$observaciones = $AUX;
+//echo ' Producto:'.$Producto;
 
 
+$idRequi = $_GET['id'] ;
 
-$id= $_POST['id'];
-
-// echo '<BR> $idUsuario  :'.$idUsuario ;
-
-
-$Folio= $_POST['Folio'];
-
-
-$hoy = getdate();
-$d = $hoy['mday'];
-  $m = $hoy['mon'];
-  $y = $hoy['year'];
-
-    $d2= date("d");
-    $m2= date("m");
-    $y2= date("y");
-
-$FechaEnvio = "$y/$m2/$d2";
+//echo ' idRequi:'.$idRequi;
 
 
 
 
 
-$sql='
-INSERT INTO movdRequisiciones2023FormAdq(
-  
-    idRequisiciones2023,
-    ObservacionesFormAdq,
-    Folio,
-    FechaEnvio
-)
-VALUES(
 
-    '.$id.',
-  "'.$observaciones.'",
-  "'.$Folio.'",
-  "'.$FechaEnvio.'"
-)';
+$sql='DELETE FROM `movdRequisiciones2023` WHERE idmovdRequisiciones2023 = '.$idMovrequi.'';
 
 
 
-echo "<br>";
-echo $sql;
+
+
+//  echo "<br>";
+//  echo $sql;
 
 
 
@@ -120,34 +88,17 @@ echo $sql;
 
            
 
-      
-
-           $sql = '
-           
-UPDATE
-    Requisiciones2023
-SET
-    Estatus = "NoModificable",
-    idProceso = 6
-WHERE
-idRequisiciones2023 = '.$id.'
-           
-           
-           ';
-
-          // echo $sql;
-
-           $result = $conexion->query($sql);
-
+           // echo "Correcto";
 
            
+          
+          
 
-          // header('Location: ReporteADQ.php?id='.$id.'');
-           header('Location: EnviarADQUF.php?id='.$id.'&bridge=1');
+            header('Location: ReporteADQset.php?id='.$idRequi.'');
      }
      else {
-      // echo "Error al momento de insertar";
-        // header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
+       echo "Error al momento de insertar";
+        //header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
      }
  
 

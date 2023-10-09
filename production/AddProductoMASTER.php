@@ -56,10 +56,6 @@ $Producto = $_POST['Producto'] ;
 $idRequi = $_POST['idRequi'] ;
 //echo ' idRequi:'.$idRequi;
 
-$idLicitacion = $_POST['idLicitacion'];
-
-//echo '<BR>idLicitacion:'.$idLicitacion;
-
 
 
 $host_db = "localhost";
@@ -81,7 +77,7 @@ $sql1="SELECT * FROM catcUnidadesMedida WHERE idcatcUnidadesMedida = $unidadMedi
 $result = $conexion->query($sql1);
 
 if ($result->num_rows > 0)  {}
-
+          
 $row = $result->fetch_array(MYSQLI_ASSOC);
 
 $unidadMedidaTraducida = $row['descripcionUnidadMedida'];
@@ -93,90 +89,15 @@ $unidadMedidaTraducida = $row['descripcionUnidadMedida'];
 
 // genera Descripcion producto leiible  inicio
 
-//$sql2="SELECT * FROM catcProductos WHERE descripcionProducto like = '%$Producto%'";
-
-$sql2 = "SELECT * FROM catcProductos WHERE descripcionProducto = '$Producto'";
- //echo  $sql2;
+$sql2="SELECT * FROM catcProductos WHERE idProducto = $Producto";
+// echo  $sql2;
 $result = $conexion->query($sql2);
 
-
-if ($result) {
-    // Verificar si no hay registros
-    if ($result->num_rows === 0) {
-        echo "No se encontraron registros.";
-
-        error_log("WALDORFFF-->".$idLicitacion);
-
-          if ($idLicitacion == 1) {
-
-            $sqlInsertProducto = '
-            INSERT INTO catcProductos(
-    
-                idObjetoGasto,
-                descripcionProducto,
-                idLicitacion,
-                Activo
-    
-            )
-            VALUES(
-                '.$ObjetoGasto.',
-                "'.$Producto.'",
-                0,
-                1
-    
-    
-            )';
-
-
-
-          }else{
-
-            // no se inserta nada si es licitacion
-          //  $sqlInsertProducto = "SELECT * FROM catcProductos";
-
-          }
-
-
-        if ($conexion->query($sqlInsertProducto) )
-        { //agregado correctamente
-
-          $sql10 = "SELECT * FROM catcProductos WHERE descripcionProducto = '$Producto'";
-          // echo  $sql2;
-          $result = $conexion->query($sql10);
-
-          $row = $result->fetch_array(MYSQLI_ASSOC);
-          $idProducto = $row['idProducto'];
-          $idObjetoGasto = $row['descripcionProducto'];
-          $descripcionProductoRequi = $row['descripcionProducto'];
-          $idLicitacion = $row['idLicitacion'];
-
-        }
-        else {
-          //no se agregado
-          echo "no se agrego el producto";
-
+if ($result->num_rows > 0)  {}
           
-        }
+$row = $result->fetch_array(MYSQLI_ASSOC);
 
-
-
-
-
-    } else {
-        // Procesar los registros
-
-      $row = $result->fetch_array(MYSQLI_ASSOC);
-      $idProducto = $row['idProducto'];
-      $idObjetoGasto = $row['descripcionProducto'];
-      $descripcionProductoRequi = $row['descripcionProducto'];
-      $idLicitacion = $row['idLicitacion'];
-
-
-    }
- }
-
-
-
+$descripcionProductoRequi = $row['descripcionProducto'];
 
 
 // enera Descripcion producto leiible  FIN
@@ -186,7 +107,7 @@ if ($result) {
 
 
 
-$sql50='
+$sql='
 INSERT INTO movdRequisiciones2023(
     idRequisiciones2023,
     idObjetoGasto,
@@ -199,12 +120,12 @@ INSERT INTO movdRequisiciones2023(
     FolioUF,
     Precio
 )
-VALUES(
+VALUES( 
     '.$idRequi.',
     '.$ObjetoGasto.',
     '.$Cantidad.',
     '.$unidadMedida.',
-    '.$idProducto.',
+    '.$Producto.',
     0,
     "'.$descripcionProductoRequi.'",
     "'.$unidadMedidaTraducida.'",
@@ -239,34 +160,30 @@ VALUES(
 
  // se inserta la requisicion en la tabla Requisiciones2023
 
+//  $resultado = $conexion->query($sql);
 
 
 //echo $sql;
+     if ($conexion->query($sql) )
+     {
 
 
-if ($idObjetoGasto = $ObjetoGasto) {
+           
 
+           // echo "Correcto";
 
-  if ($conexion->query($sql50) )
-  {
-      // echo "Correcto";
-     header('Location: registroObjetosRequi.php?id='.$idRequi.'#partidas');
-  }
-  else {
-   // echo "Error al momento de insertar";
-   header('Location: registroObjetosRequi.php?id='.$idRequi.'#partidas');
-  }
+           
+          
+          
 
+            header('Location: ReporteADQset.php?id='.$idRequi.'');
+     }
+     else {
+       echo "Error al momento de insertar";
+        //header('Location: ../Mensajes.php?Accion=Error&Mensaje=No se inserto');
+     }
+ 
 
-
-
-
-}else{
-  // error.....
-  echo "error....";
-
-
-}
 
 
 

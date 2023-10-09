@@ -341,7 +341,7 @@ window.open(FormatoRequi.php?Mensaje=Correcto&Folio='.$Folio.', "Diseño Web", "
 
 
                                                                   $sql = "SELECT * FROM Usuarios a INNER JOIN Requisiciones2023 b on a.idUsuario = b.idUsuario INNER JOIN catcEstatusProceso c on b.idProceso = c.idProceso WHERE a.idUsuario= '$idUsuario'";
-                                                                    echo $sql;
+                                                                    //echo $sql;
                                                                   $resultado = $conexion->query($sql);
 
                                                           
